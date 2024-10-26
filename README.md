@@ -7,6 +7,7 @@ Project's progress can be viewed in [changelog](./changelog.md).
 ## About
 
 ## Installation
+- Install nest cli: npm install -g @nestjs/cli
 
 ### Run developement mode in docker
 
