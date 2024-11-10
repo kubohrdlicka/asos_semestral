@@ -4,7 +4,7 @@
       class="flex items-center justify-between p-6 lg:px-8"
       aria-label="Global"
     >
-      <div class="flex lg:flex-1 text-2xl">CTF Simulator</div>
+      <div class="flex lg:flex-1 text-2xl">Title</div>
       <div class="hidden lg:flex lg:gap-x-12">
         <router-link
           v-for="item in navigation"
