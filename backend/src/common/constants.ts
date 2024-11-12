@@ -1,0 +1,4 @@
+export const DATABASE_TYPE = 'postgres';
+export const DATA_SOURCE = 'DATA_SOURCE';
+export const USERS_REPOSITORY = 'USERS_REPOSITORY';
+export const HELLOWORLD_REPOSITORY = 'HELLOWORLD_REPOSITORY';

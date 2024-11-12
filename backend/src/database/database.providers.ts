@@ -1,11 +1,13 @@
+import { DATA_SOURCE } from 'src/common/constants';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
-    provide: 'DATA_SOURCE',
+    provide: DATA_SOURCE,
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'postgres',
+        // @ts-ignore
+        type: process.env.DB_TYPE || 'postgres',
         host: process.env.DB_HOST || 'localhost',
         port: +process.env.DB_PORT || 5432,
         username: process.env.DB_USER,
