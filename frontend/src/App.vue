@@ -25,6 +25,34 @@ export const routeTransitionDuration = 150 // in miliseconds
 </script>
 
 <style>
+@font-face {
+  font-family: 'Kanit';
+  src: url('/Kanit-Bold.ttf') format('TrueType');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Kanit';
+  src: url('/Kanit-Regular.ttf') format('TrueType');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Kanit';
+  src: url('/Kanit-Light.ttf') format('TrueType');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Kanit';
+  src: url('/Kanit-Thin.ttf') format('TrueType');
+  font-weight: 100;
+  font-style: normal;
+}
+body {
+  font-family: 'Kanit';
+}
+
 /* route transition animation */
 .route-enter-from,
 .route-leave-to {

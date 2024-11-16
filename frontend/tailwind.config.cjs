@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -5,18 +7,21 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#f9fafb',
-          100: '#f3f4f6',
-          200: '#e5e7eb',
-          300: '#d1d5db',
-          400: '#9ca3af',
-          500: '#6b7280',
-          600: '#4b5563',
-          700: '#374151',
-          800: '#1f2937',
-          900: '#111827'
+          50: '#e6fefd',
+          100: '#cefdfb',
+          200: '#83fbf5',
+          300: '#52faf1',
+          400: '#05ada5',
+          500: '#047c76',
+          600: '#035c58',
+          700: '#024a47',
+          800: '#02312f',
+          900: '#011918'
         }
-      }
+      },
+      fontFamily: {
+        kanit: ['Kanit', ...defaultTheme.fontFamily.sans],
+      },
     }
   },
   plugins: [
