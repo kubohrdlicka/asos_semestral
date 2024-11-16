@@ -2,5 +2,24 @@
   "navigation": {
     "back": "Back",
     "save": "Save"
+  },
+  "validation": {
+    "requiredField": "Required Field"
+  },
+  "views": {
+    "login": {
+      "title": "Log in",
+      "email": "Email",
+      "password": "Password",
+      "loginCTA": "Login",
+      "toRegisterMessage": "No account?",
+      "registerLinkCTA": "Register"
+    },
+    "register": {
+      "title": "Register",
+      "toLoginMessage": "Already have an account?",
+      "registerCTA": "Register",
+      "loginLinkCTA": "Login"
+    }
   }
 }
