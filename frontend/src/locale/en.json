@@ -19,7 +19,11 @@
       "title": "Register",
       "toLoginMessage": "Already have an account?",
       "registerCTA": "Register",
-      "loginLinkCTA": "Login"
+      "loginLinkCTA": "Login",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "passwordRepeat": "Repeat Password"
     }
   }
 }

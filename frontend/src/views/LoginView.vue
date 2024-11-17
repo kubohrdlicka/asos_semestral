@@ -2,7 +2,7 @@
   <div class="w-full bg-primary-800 bg-gradient-to-bl from-primary-700 to-primary-900">
     <div class="h-screen w-full flex justify-center items-center">
       
-      <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/6 bg-white mb-24 px-4 py-3 rounded-lg shadow-xl">
+      <div class="w-full md:w-1/2 lg:w-1/3 xl:w-1/6 bg-white mb-24 mx-3 px-4 py-3 rounded-lg shadow-xl">
 
         <div class="font-bold text-primary-700 text-4xl mt-2 mb-6">{{ $t('views.login.title') }}</div>
 
@@ -56,12 +56,12 @@
         </div>
 
         <div class="mt-10">
-          <button @click="handleLogin" :disabled="loading" class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+          <button @click="handleLogin" :disabled="loading" class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
             <LoadingIcon
               v-if="loading"
-              class="-ml-1 mr-3 h-5 w-5 text-white"
+              class="h-5 w-5 text-white"
             />
-            <div class="text-md">
+            <div class="text-md" v-else>
               {{ $t('views.login.loginCTA') }}
             </div>
           </button>
@@ -101,6 +101,7 @@ const error = ref({
 const loading = ref(false)
 
 const handleLogin = async () => {
+  loading.value = true
   // TODO: api call to login
 }
 

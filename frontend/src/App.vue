@@ -5,7 +5,9 @@
         <router-view :key="key" />
       </component>
       <router-view v-else :key="key" />
-      <template #fallback>loading</template>
+      <template #fallback>
+        <LoadingLayout />
+      </template>
     </suspense>
   </div>
 </template>
@@ -13,6 +15,7 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import { reactive, ref } from 'vue'
+import LoadingLayout from '@/layout/LoadingLayout.vue'
 
 const route = reactive(useRoute())
 const key = ref(route.path)
