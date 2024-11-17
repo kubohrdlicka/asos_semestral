@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="absolute inset-[0] p-32 z-20">
+  <div class="absolute inset-[0] p-32 z-20 pointer-events-none">
     <!-- plan: blured overlay with detail content-->
     <RouterView v-slot="{ Component }">
       <component :is="Component" />
