@@ -1,16 +1,15 @@
-import * as bcrypt from 'bcrypt';
+import * as argon2 from 'argon2';
 // import CryptoJS from 'crypto-js';
 
 export const encryptPassword = async (password: string): Promise<string> => {
-  const salt: string = await bcrypt.genSalt();
-  return await bcrypt.hash(password, salt);
+  return await argon2.hash(password);
 };
 
 export const verifyPassword = async (
   password: string,
   encryptedPassword: string,
 ) => {
-  return await bcrypt.compare(password, encryptedPassword);
+  return await argon2.verify(encryptedPassword, password);
 };
 
 // export const signWithHMACSHA256 = (secretKey: string, data: string) => {
