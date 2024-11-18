@@ -1,9 +1,9 @@
 <template>
   <div class="min-h-full bg-gradient-to-br from-white to-gray-100">
-    <div class="container mx-auto min-h-screen flex flex-col items-center justify-center pb-20">
+    <div class="container px-2 mx-auto min-h-screen flex flex-col items-center justify-center pb-20">
 
-      <div class="mx-3 rounded-lg w-full flex justify-center bg-primary-600 text-white py-8 bg-gradient-to-br from-primary-500 to-primary-800">
-        <div class="w-full lg:w-3/4">
+      <div class="rounded-lg w-full flex justify-center bg-primary-600 text-white py-8 bg-gradient-to-br from-primary-500 to-primary-800">
+        <div class="w-full lg:w-3/4 mx-3">
           <div class="text-7xl pt-4 pb-7 font-bold tracking-wide">{{ $t('views.landing.title') }}</div>
           <div class="text-xl pb-2">{{ $t('views.landing.subtitle') }}</div>
         </div>
