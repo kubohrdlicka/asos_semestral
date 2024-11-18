@@ -4,7 +4,7 @@
   >
     <div class="max-w-max mx-auto">
       <main class="sm:flex">
-        <p class="text-4xl font-extrabold text-indigo-600 sm:text-5xl">404</p>
+        <p class="text-4xl font-extrabold text-primary-600 sm:text-5xl">404</p>
         <div class="sm:ml-6">
           <div class="sm:border-l sm:border-gray-200 sm:pl-6">
             <h1
@@ -20,7 +20,7 @@
             class="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6"
           >
             <button
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-500 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               @click="goBack"
             >
               {{ $t('not_found_view.go_back') }}
@@ -36,6 +36,6 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const goBack = () => {
-  router.go(-1)
+  router.push('/')
 }
 </script>

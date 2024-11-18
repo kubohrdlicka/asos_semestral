@@ -24,6 +24,24 @@
       "email": "Email",
       "password": "Password",
       "passwordRepeat": "Repeat Password"
+    },
+    "account": {
+      "title": "Account",
+      "logout": "Logout",
+      "passwordChange": "Change Password",
+      "passwordOld": "Old Password",
+      "passwordNew": "New Password",
+      "passwordNewRepeat": "Repeat New Password",
+      "passwordChangeCTA": "Change password"
+    },
+    "landing": {
+      "title": "Take notes.",
+      "subtitle": "...and do other stuff"
     }
+  },
+  "not_found_view": {
+    "not_found": "Oops, site not found.",
+    "description": "Check the link",
+    "go_back": "Back to main page"
   }
 }

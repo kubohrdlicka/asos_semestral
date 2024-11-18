@@ -1,28 +1,30 @@
 <template>
-  <header class="bg-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 border-b border-gray-300">
+  <header class="bg-primary-600 bg-gradient-to-r from-primary-500 to-primary-700 border-b border-gray-300">
     <nav
-      class="flex items-center justify-between p-6 lg:px-8"
+      class="flex items-center justify-between px-6 py-3 lg:px-8"
       aria-label="Global"
     >
-      <div class="flex lg:flex-1 text-2xl font-bold text-primary-700">Tasks & Stuff</div>
+      <div class="flex lg:flex-1 text-2xl font-bold text-white">Tasks & Stuff</div>
       <div class="hidden lg:flex lg:gap-x-12">
         <router-link
           v-for="item in navigation"
           :key="item.name"
           :to="item.route"
-          class="font-medium text-gray-500 hover:text-gray-900"
+          class="font-medium text-white hover:text-primary-200"
           >{{ item.name }}</router-link
         >
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <!-- <a href="#" class="text-sm font-semibold leading-6 text-gray-900"
-          >Log in <span aria-hidden="true">&rarr;</span></a
-        > -->
-      </div>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a @click="logout" class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
-          Log out <span aria-hidden="true">&rarr;</span>
-        </a>
+        <router-link to="account">
+          <div class="border border-white rounded-full p-1 text-white ease-in-out hover:text-primary-200 hover:border-primary-200">
+            <UserIcon class="w-[26px] h-[26px]"/>
+          </div>
+        </router-link>
+        <!--
+          <a @click="logout" class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+            Log out <span aria-hidden="true">&rarr;</span>
+          </a>
+        -->
       </div>
     </nav>
   </header>
@@ -31,10 +33,11 @@
 import { ref } from 'vue'
 import { useUserStore } from '../../store/user'
 import router from '../../router'
+import { UserIcon } from '@heroicons/vue/24/solid';
 const userStore = useUserStore()
 
 const navigation = [
-  { name: 'Dashboard', route: 'dashboard' },
+  { name: 'Dashboard', route: 'tasks' },
   { name: 'Profile', route: 'profile' },
 ]
 
