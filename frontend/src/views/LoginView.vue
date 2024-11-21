@@ -27,7 +27,7 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.username) }}</p>
           </div>
         </div>
         <div class="mt-2">
@@ -51,8 +51,13 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.password) }}</p>
           </div>
+        </div>
+
+        <div v-if="error.result" class="mt-6 text-bold text-red-600 flex items-center justify-center">
+          <ExclamationCircleIcon class="h-5 w-5 text-red-500 me-2" aria-hidden="true" />
+          <div class="">{{ $t(error.result) }}</div>
         </div>
 
         <div class="mt-10">
@@ -86,23 +91,45 @@
 
 <script setup lang="ts">  
 import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
-import { XCircleIcon } from '@heroicons/vue/20/solid';
 import { ref } from 'vue'
 import LoadingIcon from '@/components/LoadingIcon.vue'
+
+interface LoginFormError {
+  username: string | null;
+  password: string | null;
+  result: string | null;
+}
 
 const form = ref({
   username: null,
   password: null,
 })
-const error = ref({
+const error = ref<LoginFormError>({
   username: null,
   password: null,
+  result: null,
 })
 const loading = ref(false)
 
 const handleLogin = async () => {
+  error.value = {username: null, password: null, result: null}
+  const usernameMissing = form.value.username === null || form.value.username === ""
+  const passwordMissing = form.value.password === null || form.value.password === ""
+  
+  if (usernameMissing) {
+    error.value.username = 'validation.requiredField'
+  }
+  if (passwordMissing) {
+    error.value.password = 'validation.requiredField'
+  }
+  if (usernameMissing || passwordMissing) {
+    return
+  }
+
   loading.value = true
   // TODO: api call to login
+
+  error.value.result = 'validation.invalidCredentials'
 }
 
 </script>

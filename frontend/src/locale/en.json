@@ -4,7 +4,9 @@
     "save": "Save"
   },
   "validation": {
-    "requiredField": "Required Field"
+    "requiredField": "Required Field",
+    "invalidCredentials": "Invalid Credentials",
+    "notValidEmail": "Not Valid Email"
   },
   "views": {
     "login": {
@@ -23,7 +25,8 @@
       "name": "Name",
       "email": "Email",
       "password": "Password",
-      "passwordRepeat": "Repeat Password"
+      "passwordRepeat": "Repeat Password",
+      "registrationFailed": "Registration Failed"
     },
     "account": {
       "title": "Account",

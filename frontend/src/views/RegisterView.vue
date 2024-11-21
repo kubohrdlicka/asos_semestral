@@ -27,7 +27,7 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.name) }}</p>
           </div>
         </div>
         <div class="mt-2">
@@ -51,7 +51,7 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.email) }}</p>
           </div>
         </div>
         <div class="mt-2">
@@ -75,7 +75,7 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.password) }}</p>
           </div>
         </div>
         <div class="mt-2">
@@ -99,10 +99,14 @@
                 <ExclamationCircleIcon class="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             </div>
-            <p class="text-sm text-red-600">{{ $t('validation.requiredField') }}</p>
+            <p class="text-sm text-red-600">{{ $t(error.passwordRepeat) }}</p>
           </div>
         </div>
-        
+
+        <div v-if="error.result" class="mt-6 text-bold text-red-600 flex items-center justify-center">
+          <ExclamationCircleIcon class="h-5 w-5 text-red-500 me-2" aria-hidden="true" />
+          <div class="">{{ $t(error.result) }}</div>
+        </div>        
 
         <div class="mt-10">
           <button @click="handleLogin" :disabled="loading" class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
@@ -135,9 +139,16 @@
 
 <script setup lang="ts">  
 import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
-import { XCircleIcon } from '@heroicons/vue/20/solid';
 import { ref } from 'vue'
 import LoadingIcon from '@/components/LoadingIcon.vue'
+
+interface RegisterFormError {
+  name: string | null;
+  email: string | null;
+  password: string | null;
+  passwordRepeat: string | null;
+  result: string | null;
+}
 
 const form = ref({
   name: null,
@@ -145,18 +156,50 @@ const form = ref({
   password: null,
   passwordRepeat: null,
 })
-const error = ref({
+const error = ref<RegisterFormError>({
   name: null,
   email: null,
   password: null,
   passwordRepeat: null,
+  result: null,
 })
 const loading = ref(false)
 
 const handleLogin = async () => {
+  error.value = {name: null, email: null, password: null, passwordRepeat: null, result: null}
+  const usernameMissing = form.value.name === null || form.value.name === ""
+  const emailMissing = form.value.email === null || form.value.email === ""  // TODO: maybe email regex check
+  const passwordMissing = form.value.password === null || form.value.password === ""
+  const passwordRepeatMissing = form.value.passwordRepeat === null || form.value.passwordRepeat === ""
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const emailNotValid = form.value.email !== null && !emailRegex.test(form.value.email)
+  
+  if (emailNotValid) {
+    error.value.email = 'validation.notValidEmail'
+  }
+
+  if (usernameMissing) {
+    error.value.name = 'validation.requiredField'
+  }
+  if (emailMissing) {
+    error.value.email = 'validation.requiredField'
+  }
+  if (passwordMissing) {
+    error.value.password = 'validation.requiredField'
+  }
+  if (passwordRepeatMissing) {
+    error.value.passwordRepeat = 'validation.requiredField'
+  }
+  if (usernameMissing || emailMissing || passwordMissing || passwordRepeatMissing || emailNotValid) {
+    return
+  }
+
   loading.value = true
 
   // TODO: api call to login
+
+  error.value.result = 'views.register.registrationFailed'
 }
 
 </script>
