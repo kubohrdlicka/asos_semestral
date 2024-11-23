@@ -23,8 +23,8 @@ export class EntryController {
   }
 
   @Get()
-  findAll() {
-    return this.entryService.findAll();
+  findAll(@LoggedInUser() user: User) {
+    return this.entryService.findAll(user);
   }
 
   @Get(':id')
