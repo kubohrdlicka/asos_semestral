@@ -12,7 +12,7 @@
           name="route"
           mode="out-in"
           :style="{
-            '--transition-duration': routeTransitionDuration + 'ms'
+            '--transition-duration': routeTransitionDuration + 'ms',
           }"
         >
           <component :is="Component" :key="route.path" />
