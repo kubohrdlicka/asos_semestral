@@ -12,6 +12,7 @@
         <button
           type="button"
           class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          @click="toggleEdit(true)"
         >
           Add Group
         </button>
@@ -63,7 +64,7 @@
                   {{ group.description || 'N/A' }}
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                  {{ group.owner.firstName }} {{ group?.owner?.lastName }}
+                  {{ group?.owner?.firstName }} {{ group?.owner?.lastName }}
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                   {{ group.members.length }}
@@ -82,25 +83,32 @@
       </div>
     </div>
   </div>
+  <UserGroupSideover
+    v-if="renderEdit"
+    :open="visibleEdit"
+    :loading="savingInProgress"
+    @submit="handleGroupCreate"
+    @close="toggleEdit(false)"
+  />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useUserGroupStore } from '@/store/usergroup'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRenderToggleBindings } from '@/composables/useRenderToggle'
+import UserGroupSideover from '@/components/sideover/UserGroupSideover.vue'
 
-export default {
-  setup() {
-    const userGroupStore = useUserGroupStore()
-    const groups = ref<any>([])
-
-    onMounted(async () => {
-      await userGroupStore.fetchUserGroups()
-      groups.value = userGroupStore.userGroups
-    })
-
-    return {
-      groups,
-    }
-  },
+const savingInProgress = ref(false)
+const userGroupStore = useUserGroupStore()
+const groups = computed(() => userGroupStore.userGroups)
+const [toggleEdit, visibleEdit, renderEdit] =
+  useRenderToggleBindings('sideOverEdit')
+const handleGroupCreate = async (newGroup) => {
+  toggleEdit(false)
+  await useUserGroupStore().addUserGroup(newGroup)
 }
+
+onMounted(async () => {
+  await userGroupStore.fetchUserGroups()
+})
 </script>

@@ -41,8 +41,26 @@ export const useUserGroupStore = defineStore('userGroup', {
         this.isLoading = false
       }
     },
-    addUserGroup(userGroup: UserGroupDto) {
-      this.userGroups.push(userGroup)
+    async addUserGroup(userGroup: UserGroupDto) {
+      this.isLoading = true
+      try {
+        const { response, data } = await useApiFetch('usergroup')
+          .post(userGroup)
+          .json()
+        console.log('Response:', data)
+        console.log('Rsponse:', data.value)
+
+        if (response.value?.ok) {
+          this.userGroups.push(data.value)
+          await this.fetchUserGroups()
+        } else {
+          console.error('Failed to create group:', response.value?.statusText)
+        }
+      } catch (error) {
+        console.error('Error creating group:', error)
+      } finally {
+        this.isLoading = false
+      }
     },
     removeUserGroup(groupId: string) {
       this.userGroups = this.userGroups.filter((group) => group.id !== groupId)
