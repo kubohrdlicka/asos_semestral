@@ -41,8 +41,9 @@ import router from '../../router'
 const userStore = useUserStore()
 
 const navigation = [
-  { name: 'My Groups', route: 'groups' },
-  { name: 'My Profile', route: 'profile' },
+  { name: 'Dashboard', route: 'dashboard' },
+  { name: 'Groups', route: 'groups' },
+  { name: 'Profile', route: 'profile' },
 ]
 
 const logout = () => {
