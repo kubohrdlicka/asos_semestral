@@ -24,11 +24,14 @@
               </div>
             </div>
             <div class="mt-5 flex justify-center sm:mt-0">
-              <a
-                href="#"
-                class="flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                >Edit profile</a
+              <!-- Zmena na tlačidlo -->
+              <button
+                type="button"
+                class="flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500"
+                @click="toggleEdit(true)"
               >
+                Edit profile
+              </button>
             </div>
           </div>
         </div>
@@ -85,16 +88,6 @@
                 <time datetime="2023-01-31">{{ user.createdAt }}</time>
               </dd>
             </div>
-            <!-- <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
-              <dt class="flex-none">
-                <span class="sr-only">Status</span>
-                <CreditCardIcon
-                  class="h-6 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-              </dt>
-              <dd class="text-sm/6 text-gray-500">Paid with MasterCard</dd>
-            </div> -->
           </dl>
           <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
             <a
@@ -106,6 +99,15 @@
         </div>
       </div>
     </div>
+
+    <EditUserSideover
+      v-if="renderEdit"
+      :modelValue="user"
+      :open="visibleEdit"
+      :loading="savingInProgress"
+      @submit="handleUserUpdate"
+      @close="toggleEdit(false)"
+    />
   </div>
 </template>
 
@@ -113,18 +115,20 @@
 import { ref } from 'vue'
 import {
   CalendarDaysIcon,
-  CreditCardIcon,
-  UserCircleIcon,
   EnvelopeIcon,
   PhoneIcon,
 } from '@heroicons/vue/20/solid'
+import EditUserSideover from '@/components/sideover/EditUserSideover.vue'
+import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 
+// Používateľské štatistiky
 const stats = [
   { label: 'Notes created', value: 12 },
   { label: 'Groups involved', value: 4 },
   { label: 'Tasks completed', value: 2 },
 ]
 
+// Reaktívne údaje používateľa
 const user = ref({
   name: 'Meno Priezvisko',
   firstName: 'Meno',
@@ -135,6 +139,13 @@ const user = ref({
   updatedAt: '23.11.2024',
 })
 
+// Stav pre sideover
+const isSideoverOpen = ref(false)
+const savingInProgress = ref(false)
+
+const [toggleEdit, visibleEdit, renderEdit] =
+  useRenderToggleBindings('sideOver')
+
 // Funkcia na generovanie iniciál
 const getUserInitials = (): string => {
   const firstInitial = user.value.firstName.charAt(0).toUpperCase()
@@ -144,4 +155,29 @@ const getUserInitials = (): string => {
 
 // Iniciály používateľa
 const userInitials = getUserInitials()
+
+// Funkcia na aktualizáciu používateľa
+const handleUserUpdate = async (updatedUser) => {
+  console.log('Starting user update:', updatedUser)
+  savingInProgress.value = true
+
+  try {
+    // TODO: SEM PRIDAT NAMIESTO TOHO RIADKU NIZSIE NAPOJIT API a potom normalne z UserStore potiahnut nove aktualne udaje
+    await new Promise((resolve) => setTimeout(resolve, 2000)) // Simulácia oneskorenia
+
+    // Aktualizácia hlavného používateľského objektu
+    user.value = updatedUser
+    console.log('User successfully updated:', updatedUser)
+  } catch (error) {
+    console.error('Error updating user:', error)
+    // Tu môžete pridať chybu, ak je potrebné
+  } finally {
+    savingInProgress.value = false
+    toggleEdit(false) // Zavrie sideover
+  }
+}
+
+const handleEditSideover = () => {
+  isSideoverOpen.value = !isSideoverOpen.value
+}
 </script>
