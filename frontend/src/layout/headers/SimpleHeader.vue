@@ -1,6 +1,6 @@
 <template>
   <header
-    class="bg-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 border-b border-gray-300"
+    class="bg-white bg-gradient-to-r from-primary-50 to-primary-100 border-b border-gray-300"
   >
     <nav
       class="flex items-center justify-between p-6 lg:px-8"
