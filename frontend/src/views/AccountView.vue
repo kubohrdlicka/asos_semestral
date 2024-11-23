@@ -19,7 +19,7 @@
                   {{ user.firstName + ' ' + user.lastName }}
                 </p>
                 <p class="text-sm font-medium text-gray-600">
-                  OnTrack for 180 days
+                  OnTrack for {{ daysOnTrack }} days
                 </p>
               </div>
             </div>
@@ -44,7 +44,6 @@
             class="px-6 py-5 text-center text-sm font-medium"
           >
             <span class="text-primary">{{ stat.value }}</span>
-            {{ ' ' }}
             <span class="text-gray-600">{{ stat.label }}</span>
           </div>
         </div>
@@ -150,12 +149,23 @@ const formatDate = (dateString: string): string => {
   }).format(date)
 }
 
+const calculateDaysOnTrack = (createdAt: string): number => {
+  const createdDate = new Date(createdAt)
+  const currentDate = new Date()
+  const differenceInTime = currentDate.getTime() - createdDate.getTime()
+  return Math.floor(differenceInTime / (1000 * 60 * 60 * 24))
+}
+
 const user = computed(() => ({
   firstName: userStore.getFirstName,
   lastName: userStore.getLastName,
   email: userStore.getEmail,
   createdAt: userStore.createdAt ? formatDate(userStore.createdAt) : 'N/A',
 }))
+
+const daysOnTrack = computed(() =>
+  userStore.createdAt ? calculateDaysOnTrack(userStore.createdAt) : 0
+)
 
 const getUserInitials = (): string => {
   const firstInitial = user.value.firstName.charAt(0).toUpperCase()
