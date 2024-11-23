@@ -114,259 +114,55 @@
       :open="visibleEdit"
       @close="toggleEdit(false)"
     ></EntrySidover>
-
-    
   </div>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref, computed } from 'vue'
 import { TaskWidgetType } from '@/types/task'
 import TasksListWidget from '@/components/TasksListWidget.vue'
 import CalendarWidget from '@/components/CalendarWidget.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import { EllipsisVerticalIcon, PlusIcon } from '@heroicons/vue/20/solid'
 import Entry from '@/components/dashboard/Entry.vue'
-import { PlusIcon } from '@heroicons/vue/20/solid'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import EntrySidover from '@/components/dashboard/EntrySideover.vue'
-import { ref, computed } from 'vue'
+import { useApiFetch } from '@/composables/useApi'
 
-// Inicializácia tabuľky
 const tabs = [{ name: 'Tasks' }, { name: 'Notes' }]
-
-// Aktívna tabuľka
 const activeTab = ref('Tasks')
 
-// Metóda na nastavenie aktívnej tabuľky
-const setActiveTab = (tabName) => {
+const setActiveTab = (tabName: string) => {
   activeTab.value = tabName
 }
 
-// NAMOCKOVANE DATA
-const entries = [
-  {
-    id: 1,
-    createdBy: 'Lukas Visvarda',
-    type: 'task',
-    name: 'Dokončiť projekt Vue',
-    tag: {
-      name: 'Development',
-      description: 'Práce na projekte',
-      color: 'blue',
-      iconName: 'code',
-      createdAt: '2023-06-10T00:00Z',
-      updatedAt: '2023-06-10T00:00Z',
-    },
-    priority: 'high',
-    description: 'Je potrebné dokončiť projekt Vue pred deadlinom.',
-    deadline: '2023-12-15T10:00Z',
-    status: 'Done',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 2,
-    createdBy: 'Sophia Carter',
-    type: 'note',
-    name: 'Schôdzka so zákazníkom',
-    tag: {
-      name: '',
-      description: '',
-      color: '',
-      iconName: '',
-      createdAt: '',
-      updatedAt: '',
-    },
-    priority: '',
-    description: 'Poznámky zo schôdzky so zákazníkom.',
-    deadline: '',
-    status: '',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 3,
-    createdBy: 'Lukas Visvarda',
-    type: 'task',
-    name: 'Pripraviť školenie pre tím',
-    tag: {
-      name: 'Training',
-      description: '',
-      color: 'green',
-      iconName: 'school',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: 'medium',
-    description: 'Školenie o nových technológiách.',
-    deadline: '2023-12-20T14:00Z',
-    status: 'TODO',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 4,
-    createdBy: 'Sophia Carter',
-    type: 'note',
-    name: 'Poznámky z prezentácie',
-    tag: {
-      name: 'Meetings',
-      description: '',
-      color: '',
-      iconName: '',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: '',
-    description: '',
-    deadline: '',
-    status: '',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 5,
-    createdBy: 'Lukas Visvarda',
-    type: 'task',
-    name: 'Testovanie aplikácie',
-    tag: {
-      name: 'Testing',
-      description: 'Kontrola kvality aplikácie.',
-      color: 'red',
-      iconName: 'bug',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: 'high',
-    description: 'Otestovať všetky funkcie aplikácie.',
-    deadline: '2023-12-18T18:00Z',
-    status: 'In Progress',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 6,
-    createdBy: 'Sophia Carter',
-    type: 'note',
-    name: 'Zoznam úloh na december',
-    tag: {
-      name: 'Planning',
-      description: 'Zoznam dôležitých úloh.',
-      color: 'purple',
-      iconName: 'list',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: '',
-    description: 'Zoznam dôležitých úloh na mesiac december.',
-    deadline: '',
-    status: '',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 7,
-    createdBy: 'Lukas Visvarda',
-    type: 'task',
-    name: 'Opraviť chyby v aplikácii',
-    tag: {
-      name: 'Bug Fixing',
-      description: 'Riešenie bugov.',
-      color: 'orange',
-      iconName: 'hammer',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: 'low',
-    description: 'Vyčistiť kód a opraviť nájdené chyby.',
-    deadline: '2023-12-22T12:00Z',
-    status: 'TODO',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 8,
-    createdBy: 'Sophia Carter',
-    type: 'note',
-    name: 'Poznámky k novému dizajnu',
-    tag: {
-      name: 'Design',
-      description: 'Dizajnové zmeny.',
-      color: 'teal',
-      iconName: 'paintbrush',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: '',
-    description: 'Nové zmeny v dizajne aplikácie.',
-    deadline: '',
-    status: '',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 9,
-    createdBy: 'Lukas Visvarda',
-    type: 'task',
-    name: 'Pripraviť dokumentáciu',
-    tag: {
-      name: 'Documentation',
-      description: 'Písanie technickej dokumentácie.',
-      color: 'gray',
-      iconName: 'file-text',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: 'medium',
-    description: 'Pripraviť technickú dokumentáciu k aplikácii.',
-    deadline: '2023-12-19T16:00Z',
-    status: 'TODO',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-  {
-    id: 10,
-    createdBy: 'Sophia Carter',
-    type: 'task',
-    name: 'Prezentácia pre klienta',
-    tag: {
-      name: 'Presentation',
-      description: 'Pripraviť prezentáciu.',
-      color: 'pink',
-      iconName: 'presentation-chart',
-      createdAt: '2023-12-01T08:00Z',
-      updatedAt: '2023-12-01T08:00Z',
-    },
-    priority: 'high',
-    description: 'Pripraviť prezentáciu o projekte pre klienta.',
-    deadline: '2023-12-20T10:00Z',
-    status: 'In Progress',
-    createdAt: '2023-12-01T08:00Z',
-    updatedAt: '2023-12-01T08:00Z',
-  },
-]
-
-// Reactive state
-const entry = ref({
-  type: 'note',
-  name: '',
-  tag: '',
-  priority: '',
-  description: '',
-  deadline: '',
-  status: '',
-})
+const entries = ref([])
 
 const filteredTasks = computed(() =>
-  entries.filter((entry) => entry.type === 'task')
+  entries.value.filter((entry) => entry.type === 'task')
 )
-
 const filteredNotes = computed(() =>
-  entries.filter((entry) => entry.type === 'note')
+  entries.value.filter((entry) => entry.type === 'note')
 )
 
 const [toggleEdit, visibleEdit, renderEdit] =
   useRenderToggleBindings('sideOver')
 
+const fetchEntries = async () => {
+  try {
+    const { response, data } = await useApiFetch('entry').get().json()
+    if (response.value?.ok && data.value) {
+      entries.value = data.value
+      console.log('Entries fetched successfully:', data.value)
+    } else {
+      console.error('Failed to fetch entries:', response.value?.statusText)
+    }
+  } catch (error) {
+    console.error('Error fetching entries:', error)
+  }
+}
 
+onMounted(async () => {
+  await fetchEntries()
+})
 </script>

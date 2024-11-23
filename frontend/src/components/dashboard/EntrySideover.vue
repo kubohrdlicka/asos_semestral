@@ -99,7 +99,7 @@
                       </div>
 
                       <!-- Priority -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="priority"
                           class="block text-sm font-medium text-gray-700"
@@ -136,7 +136,7 @@
                       </div>
 
                       <!-- Deadline -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="deadline"
                           class="block text-sm font-medium text-gray-700"
@@ -151,7 +151,7 @@
                       </div>
 
                       <!-- Status -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="status"
                           class="block text-sm font-medium text-gray-700"
