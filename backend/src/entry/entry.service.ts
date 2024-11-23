@@ -135,6 +135,7 @@ export class EntryService {
     console.log(`Users [${userIds.join(', ')}] added to entry ${entryId}`);
 
     return entry;
+    //TODO: pomocou usergroup
   }
 
   async assignToTag(entryId: number, tagId: number): Promise<Entry> {

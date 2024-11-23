@@ -1,11 +1,4 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { BeforeInsert, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 
 import { IsEmail } from 'class-validator';
 import BaseEntity from 'src/common/entities/base.entity';
@@ -37,7 +30,7 @@ export class User extends BaseEntity {
     }
   }
 
-  @ManyToOne(() => Entry, (entry) => entry.owner)
+  @OneToMany(() => Entry, (entry) => entry.owner)
   entries: Entry[];
 
   @OneToMany(() => UserGroup, (userGroup) => userGroup.owner)
