@@ -5,7 +5,18 @@
       class="flex flex-1 w-full flex-col mt-10 pb-12 px-4 sm:px-6 lg:flex-none lg:px-12 xl:px-12"
     >
       <!-- Hlavná sekcia -->
-      <div class="mb-4 text-lg font-bold">Dashboard</div>
+      <div class="w-full flex justify-between mb-5">
+        <div class="mb-4 text-lg font-bold">Dashboard</div>
+        <div class="flex">
+          <button
+            type="button"
+            class="items-center rounded-full bg-primary p-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            @click="toggleEdit(true)"
+          >
+            <PlusIcon class="w-8 h-8" aria-hidden="true"></PlusIcon>
+          </button>
+        </div>
+      </div>
 
       <!-- Posúvateľná tabuľka -->
       <div
@@ -22,6 +33,11 @@
         </ul>
       </div>
     </div>
+    <EntrySidover
+      v-if="renderEdit"
+      :open="visibleEdit"
+      @close="toggleEdit(false)"
+    ></EntrySidover>
   </div>
 </template>
 
@@ -32,7 +48,9 @@ import CalendarWidget from '@/components/CalendarWidget.vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
 import Entry from '@/components/dashboard/Entry.vue'
-
+import { PlusIcon } from '@heroicons/vue/20/solid'
+import { useRenderToggleBindings } from '@/composables/useRenderToggle'
+import EntrySidover from '@/components/dashboard/EntrySideover.vue'
 const statuses = {
   Complete: 'text-green-700 bg-green-50 ring-green-600/20',
   'In progress': 'text-gray-600 bg-gray-50 ring-gray-500/10',
@@ -80,4 +98,7 @@ const projects = [
     deadline: '2023-06-10T00:00Z',
   },
 ]
+
+const [toggleEdit, visibleEdit, renderEdit] =
+  useRenderToggleBindings('sideOver')
 </script>
