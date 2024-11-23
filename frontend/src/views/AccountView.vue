@@ -44,6 +44,7 @@
             class="px-6 py-5 text-center text-sm font-medium"
           >
             <span class="text-primary">{{ stat.value }}</span>
+            {{ ' ' }}
             <span class="text-gray-600">{{ stat.label }}</span>
           </div>
         </div>
