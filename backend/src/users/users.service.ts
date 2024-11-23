@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { mapUserToGetUserDto } from './mappers/user.mapper';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -16,6 +17,7 @@ export class UsersService {
   constructor(
     @Inject(USERS_REPOSITORY)
     private readonly userRepository: Repository<User>,
+    private jwtService: JwtService,
   ) {}
 
   async findAll(): Promise<GetUserDto[] | undefined> {
@@ -46,7 +48,9 @@ export class UsersService {
     });
   }
 
-  async create(createUserDto: CreateUserDto): Promise<GetUserDto | undefined> {
+  async create(
+    createUserDto: CreateUserDto,
+  ): Promise<{ access_token: string; user: GetUserDto }> {
     const existingUser = await this.userRepository.findOne({
       where: { email: createUserDto.email },
     });
@@ -58,8 +62,14 @@ export class UsersService {
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user);
 
+    const payload = { email: user.email, sub: user.id };
+    const token = this.jwtService.sign(payload);
+
     delete savedUser.password;
 
-    return mapUserToGetUserDto(savedUser);
+    return {
+      access_token: token,
+      user: mapUserToGetUserDto(savedUser),
+    };
   }
 }

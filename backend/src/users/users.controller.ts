@@ -15,9 +15,14 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<GetUserDto> {
-    const a = await this.usersService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ user: GetUserDto; access_token: string }> {
+    const result = await this.usersService.create(createUserDto);
 
-    return a;
+    return {
+      user: result.user,
+      access_token: result.access_token,
+    };
   }
 }
