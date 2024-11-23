@@ -82,21 +82,8 @@
                           type="email"
                           id="email"
                           v-model="user.email"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                        />
-                      </div>
-
-                      <div>
-                        <label
-                          for="phone"
-                          class="block text-sm font-medium text-gray-700"
-                          >Phone</label
-                        >
-                        <input
-                          type="tel"
-                          id="phone"
-                          v-model="user.phone"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                          disabled
+                          class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm focus:border-gray-300 focus:ring-0 sm:text-sm cursor-not-allowed"
                         />
                       </div>
                     </div>
