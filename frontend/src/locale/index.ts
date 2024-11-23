@@ -9,6 +9,7 @@ export const getLocale = () => {
 }
 
 const i18n = createI18n({
+  legacy: false,
   locale: getLocale(),
   messages: {
     en,

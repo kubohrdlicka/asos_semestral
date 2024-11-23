@@ -1,9 +1,9 @@
 import { markRaw } from 'vue'
 import router from '@/router/index'
 import { defineStore, createPinia } from 'pinia'
-import {useApiFetch} from "@/composables/useApi";
-import {GetUserDto} from "@/types/user";
-import {UseFetchReturn} from "@vueuse/core";
+import { useApiFetch } from '@/composables/useApi'
+import { GetUserDto } from '@/types/user'
+import { UseFetchReturn } from '@vueuse/core'
 
 //const useRouter = markRaw(router)
 
@@ -28,13 +28,13 @@ export const useUserStore = defineStore('user', {
 
   actions: {
     logout() {
-      this.setFirstName('');
-      this.setLastName('');
-      this.setEmail('');
-      this.setAccessToken('');
-      this.setAuth(false);
+      this.setFirstName('')
+      this.setLastName('')
+      this.setEmail('')
+      this.setAccessToken('')
+      this.setAuth(false)
 
-      window.localStorage.removeItem('accessToken');
+      window.localStorage.removeItem('accessToken')
     },
     setAccessToken(token: string) {
       this.accessToken = token
@@ -55,7 +55,7 @@ export const useUserStore = defineStore('user', {
     async init() {
       const token = window.localStorage.getItem('accessToken')
       if (token) {
-        const {response, data} = await useApiFetch('me').get().json();
+        const { response, data } = await useApiFetch('auth/me').get().json()
         if (response.value?.status === 200) {
           this.setFirstName(data.value.first_name)
           this.setLastName(data.value.last_name)
@@ -63,10 +63,10 @@ export const useUserStore = defineStore('user', {
           this.setAccessToken(token)
           this.setAuth(true)
         }
-        if(response.value?.status === 401) {
+        if (response.value?.status === 401) {
           window.localStorage.removeItem('accessToken')
         }
       }
-    }
+    },
   },
 })
