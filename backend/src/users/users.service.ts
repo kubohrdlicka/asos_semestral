@@ -84,9 +84,6 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    if (updateUserDto.password) {
-      user.password = updateUserDto.password;
-    }
     if (updateUserDto.firstName) {
       user.firstName = updateUserDto.firstName;
     }
