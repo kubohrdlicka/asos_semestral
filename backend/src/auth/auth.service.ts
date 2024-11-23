@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoggedInDto } from './dto/logged-in.dto';
 import * as argon2 from 'argon2';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -41,5 +42,34 @@ export class AuthService {
       access_token: token,
       user: getUser,
     };
+  }
+
+  async resetPassword(
+    user: User,
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string,
+  ): Promise<string> {
+    // Overenie, že nové heslá sa zhodujú
+    if (newPassword !== confirmPassword) {
+      throw new HttpException(
+        'New password and confirmation do not match',
+        400,
+      );
+    }
+
+    // Overenie starého hesla
+    const isPasswordValid = await argon2.verify(user.password, oldPassword);
+    if (!isPasswordValid) {
+      throw new HttpException('Old password is incorrect', 401);
+    }
+
+    // Aktualizácia hesla
+    user.password = newPassword;
+
+    // Uloženie do databázy
+    await this.usersService.updatePassword(user);
+
+    return 'Password reset successfully';
   }
 }

@@ -36,4 +36,9 @@ export class UsersController {
   ): Promise<GetUserDto> {
     return this.usersService.update(user, updateUserDto);
   }
+
+  @Get('/stats')
+  async getStats(@LoggedInUser() user: User): Promise<any> {
+    return this.usersService.getUserStats(user);
+  }
 }

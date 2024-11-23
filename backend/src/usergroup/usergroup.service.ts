@@ -205,4 +205,12 @@ export class UsergroupService {
 
     await this.userGroupRepository.save(userGroup);
   }
+
+  async countGroupsByUser(user: User) {
+    return await this.userGroupRepository
+      .createQueryBuilder('userGroup')
+      .leftJoin('userGroup.members', 'member')
+      .where('member.id = :userId', { userId: user.id })
+      .getCount();
+  }
 }

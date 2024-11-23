@@ -12,12 +12,20 @@ import { GetUserDto } from './dto/get-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USERS_REPOSITORY } from 'src/common/constants';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Status } from '../entry/entities/entry.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(USERS_REPOSITORY)
     private readonly userRepository: Repository<User>,
+
+    // @Inject()
+    // private entryService: EntryService,
+    //
+    // @Inject()
+    // private userGroupService: UsergroupService,
+
     private jwtService: JwtService,
   ) {}
 
@@ -95,5 +103,32 @@ export class UsersService {
     delete updatedUser.password;
 
     return mapUserToGetUserDto(updatedUser);
+  }
+
+  async updatePassword(user: User) {
+    await this.userRepository.save(user);
+  }
+
+  async getUserStats(user: User): Promise<any> {
+    const userWithEntries = await this.userRepository.findOne({
+      where: { id: user.id },
+      relations: {
+        entries: true,
+        memberOf: true,
+      },
+    });
+
+    const totalTasksCreated = userWithEntries?.entries.length;
+    const completedTasks = userWithEntries?.entries.filter(
+      (entry) => entry.status === Status.DONE,
+    ).length;
+
+    const totalGroups = userWithEntries?.memberOf.length;
+
+    return {
+      totalTasksCreated,
+      completedTasks,
+      totalGroups,
+    };
   }
 }

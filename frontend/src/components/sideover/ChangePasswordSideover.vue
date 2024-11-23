@@ -26,7 +26,7 @@
                     class="flex items-center justify-between px-4 py-6 sm:px-6"
                   >
                     <DialogTitle class="text-lg font-semibold text-gray-900">
-                      Edit User
+                      Change Password
                     </DialogTitle>
                     <button
                       type="button"
@@ -44,46 +44,48 @@
                     class="flex-1 overflow-y-auto px-4 py-6 sm:px-6"
                   >
                     <div class="space-y-4">
+                      <!-- Old Password -->
                       <div>
                         <label
-                          for="first-name"
+                          for="old-password"
                           class="block text-sm font-medium text-gray-700"
-                          >First Name</label
+                          >Old Password</label
                         >
                         <input
-                          type="text"
-                          id="first-name"
-                          v-model="user.firstName"
+                          type="password"
+                          id="old-password"
+                          v-model="passwords.oldPassword"
                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                         />
                       </div>
 
+                      <!-- New Password -->
                       <div>
                         <label
-                          for="last-name"
+                          for="new-password"
                           class="block text-sm font-medium text-gray-700"
-                          >Last Name</label
+                          >New Password</label
                         >
                         <input
-                          type="text"
-                          id="last-name"
-                          v-model="user.lastName"
+                          type="password"
+                          id="new-password"
+                          v-model="passwords.newPassword"
                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                         />
                       </div>
 
+                      <!-- Confirm Password -->
                       <div>
                         <label
-                          for="email"
+                          for="confirm-password"
                           class="block text-sm font-medium text-gray-700"
-                          >Email</label
+                          >Confirm Password</label
                         >
                         <input
-                          type="email"
-                          id="email"
-                          v-model="user.email"
-                          disabled
-                          class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm focus:border-gray-300 focus:ring-0 sm:text-sm cursor-not-allowed"
+                          type="password"
+                          id="confirm-password"
+                          v-model="passwords.confirmPassword"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                         />
                       </div>
                     </div>
@@ -105,7 +107,6 @@
                           v-if="loading"
                           class="-ml-1 mr-3 h-5 w-5 text-white"
                         />
-                        <slot />
                         Save
                       </button>
                     </div>
@@ -121,7 +122,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, defineEmits, watch, type PropType } from 'vue'
+import { ref, defineEmits } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -134,10 +135,6 @@ import LoadingIcon from '@/components/LoadingIcon.vue'
 
 // Props
 const props = defineProps({
-  modelValue: {
-    type: Object as PropType<any>,
-    required: true,
-  },
   open: {
     type: Boolean,
     required: true,
@@ -150,20 +147,31 @@ const props = defineProps({
 
 // Emits
 const emit = defineEmits<{
-  (e: 'submit', user: any): void
+  (e: 'submit', passwords: { oldPassword: string; newPassword: string }): void
   (e: 'close'): void
 }>()
 
-const user = ref({ ...props.modelValue })
-const isOpen = ref(props.open)
+// Reactive state for passwords
+const passwords = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+})
 
 // Methods
 const handleClose = () => {
   emit('close')
 }
 
-// Metóda na odoslanie údajov pri stlačení tlačidla Save
 const handleSubmit = () => {
-  emit('submit', user.value) // Odošle aktualizovaný objekt do rodiča
+  if (passwords.value.newPassword !== passwords.value.confirmPassword) {
+    alert('New password and confirm password must match.')
+    return
+  }
+  emit('submit', {
+    oldPassword: passwords.value.oldPassword,
+    newPassword: passwords.value.newPassword,
+    confirmPassword: passwords.value.confirmPassword,
+  })
 }
 </script>
