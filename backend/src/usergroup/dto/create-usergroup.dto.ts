@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsHexColor, IsInt } from 'class-validator';
+import { IsString, IsOptional, IsHexColor } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUsergroupDto {
