@@ -4,7 +4,7 @@
       class="flex items-center justify-between p-6 lg:px-8"
       aria-label="Global"
     >
-      <div class="flex lg:flex-1 text-2xl font-bold text-primary-700">Tasks & Stuff</div>
+      <div class="flex lg:flex-1 text-2xl font-bold text-primary font-sans">Dashboard</div>
       <div class="hidden lg:flex lg:gap-x-12">
         <router-link
           v-for="item in navigation"
@@ -34,8 +34,8 @@ import router from '../../router'
 const userStore = useUserStore()
 
 const navigation = [
-  { name: 'Dashboard', route: 'dashboard' },
-  { name: 'Profile', route: 'profile' },
+  { name: 'My Groups', route: 'groups' },
+  { name: 'My Profile', route: 'profile' },
 ]
 
 const logout = () => {

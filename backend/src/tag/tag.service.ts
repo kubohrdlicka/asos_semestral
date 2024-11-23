@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import { TAG_REPOSITORY } from 'src/common/constants';
+import { Repository } from 'typeorm';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';
+import { Tag } from './entities/tag.entity';
 
 @Injectable()
 export class TagService {
-  create(createTagDto: CreateTagDto) {
-    return 'This action adds a new tag';
+  constructor(
+    @Inject(TAG_REPOSITORY) private readonly tagRepository: Repository<Tag>,
+  ) {}
+
+  async create(createTagDto: CreateTagDto): Promise<Tag> {
+    const newTag = this.tagRepository.create(createTagDto);
+    return await this.tagRepository.save(newTag);
   }
 
-  findAll() {
-    return `This action returns all tag`;
+  async findAll(): Promise<Tag[]> {
+    return await this.tagRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tag`;
+  async findOne(id: number): Promise<Tag> {
+    const tag = await this.tagRepository.findOne({ where: { id } });
+    if (!tag) {
+      throw new NotFoundException(`Tag with ID ${id} not found`);
+    }
+    return tag;
   }
 
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
+  async update(id: number, updateTagDto: UpdateTagDto): Promise<Tag> {
+    const tag = await this.findOne(id); // Ensure the tag exists
+    const updatedTag = this.tagRepository.merge(tag, updateTagDto);
+    return await this.tagRepository.save(updatedTag);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tag`;
+  async remove(id: number): Promise<void> {
+    const tag = await this.findOne(id); // Ensure the tag exists
+    await this.tagRepository.remove(tag);
   }
 }

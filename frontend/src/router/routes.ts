@@ -32,20 +32,29 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
-    name: 'account',
-    path: '/account',
+    name: 'profile',
+    path: '/profile',
     component: () => import('@/views/AccountView.vue'),
     meta: {
-      title: 'Account Page',
+      title: 'My Profile',
       layout: SimpleLayout
     }
   },
   {
-    name: 'taskboard',
-    path: '/tasks',
+    name: 'groups',
+    path: '/groups',
+    component: () => import('@/views/GroupsView.vue'),
+    meta: {
+      title: 'My Groups',
+      layout: SimpleLayout
+    }
+  },
+  {
+    name: 'dashboard',
+    path: '/dashboard',
     component: () => import('@/views/TaskboardView.vue'),
     meta: {
-      title: 'Taskboard Page',
+      title: 'My Dashboard',
       layout: SimpleLayout
     },
     children: [
