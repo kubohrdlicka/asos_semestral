@@ -1,13 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional } from 'class-validator';
 import BaseDto from 'src/common/dto/base.dto';
 
-export class CreateTagDto extends BaseDto {
+export class GetTagDto extends BaseDto {
+  @ApiProperty({
+    description: 'Unique identifier of the tag',
+    example: 1,
+  })
+  id: number;
+
   @ApiProperty({
     description: 'Name of the tag',
     example: 'Work',
   })
-  @IsString()
   name: string;
 
   @ApiProperty({
@@ -15,15 +19,12 @@ export class CreateTagDto extends BaseDto {
     example: 'Tasks related to work',
     required: false,
   })
-  @IsOptional()
-  @IsString()
   description?: string;
 
   @ApiProperty({
     description: 'Color of the tag, in hex format',
     example: '#FF5733',
   })
-  @IsString()
   color: string;
 
   @ApiProperty({
@@ -31,7 +32,11 @@ export class CreateTagDto extends BaseDto {
     example: 'work-outline',
     required: false,
   })
-  @IsOptional()
-  @IsString()
   iconName?: string;
+
+  @ApiProperty({
+    description: 'Number of entries associated with the tag',
+    example: 5,
+  })
+  entryCount: number;
 }
