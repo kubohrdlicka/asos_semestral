@@ -261,11 +261,11 @@ const entry = ref({
   tag: '',
   priority: '',
   description: '',
-  deadline: '',
+  deadline: null as Date | null,
   status: '',
-  color: '', // Additional field for color
-  iconName: '', // Additional field for icon name
-  tagId: 0, // Additional field for tag ID
+  color: '',
+  iconName: '',
+  tagId: 0,
 })
 
 // Methods
@@ -274,10 +274,13 @@ const handleClose = () => {
 }
 
 const handleSubmit = async () => {
-  console.log('Submitting entry:', entry.value)
-
   props.loading = true
+
   try {
+    if (entry.value.deadline && !(entry.value.deadline instanceof Date)) {
+      entry.value.deadline = new Date(entry.value.deadline)
+    }
+
     const { response, data } = await useApiFetch('entry')
       .post({
         type: entry.value.type,
@@ -286,9 +289,9 @@ const handleSubmit = async () => {
         description: entry.value.description,
         deadline: entry.value.deadline,
         status: entry.value.status,
-        color: entry.value.color, //optional
-        iconName: entry.value.iconName, //optional
-        tagId: entry.value.tag,
+        color: entry.value.color,
+        iconName: entry.value.iconName,
+        tagId: entry.value.tagId,
       })
       .json()
 

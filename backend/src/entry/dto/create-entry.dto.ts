@@ -45,7 +45,6 @@ export class CreateEntryDto {
 
   @ApiProperty()
   @IsOptional()
-  @IsDate()
   deadline?: Date;
 
   @ApiProperty({ enum: Status })
