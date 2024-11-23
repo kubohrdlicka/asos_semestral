@@ -1,37 +1,43 @@
-import BaseEntity from 'src/common/entities/base.entity';
-import { Tag } from 'src/tag/entities/tag.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Tag } from 'src/tag/entities/tag.entity';
+import e from 'express';
+import BaseEntity from 'src/common/entities/base.entity';
 
-enum Type {
-  NOTE = 'note',
-  TASK = 'task',
+export enum Priority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
 }
+
+export enum Status {
+  TODO = 'TODO',
+  IN_PROGRESS = 'In Progress',
+  DONE = 'Done',
+}
+
 @Entity()
 export class Entry extends BaseEntity {
-  @OneToMany(() => User, (user) => user.entries)
+  @ManyToOne(() => User, (user) => user.entries)
   owner: User;
-
-  @Column({ type: 'enum', enum: Type })
-  type: string;
-
-  @Column()
-  name: string;
 
   @ManyToOne(() => Tag, (tag) => tag.entries, { nullable: true })
   tag: Tag;
 
+  @Column({ type: 'enum', enum: Priority })
+  priority: Priority;
+
+  @Column({ type: 'enum', enum: Status })
+  status: Status;
+
   @Column()
-  priority: string;
+  name: string;
 
   @Column({ nullable: true })
   description?: string;
 
   @Column({ nullable: true })
   deadline?: Date;
-
-  @Column()
-  status: 'Done' | 'InProgress';
 
   @Column({ nullable: true })
   color?: string;

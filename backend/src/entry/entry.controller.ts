@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { EntryService } from './entry.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { UpdateEntryDto } from './dto/update-entry.dto';
@@ -18,17 +26,27 @@ export class EntryController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.entryService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.entryService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEntryDto: UpdateEntryDto) {
-    return this.entryService.update(+id, updateEntryDto);
+  update(@Param('id') id: number, @Body() updateEntryDto: UpdateEntryDto) {
+    return this.entryService.update(id, updateEntryDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.entryService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.entryService.remove(id);
+  }
+
+  @Post(':id/users')
+  addUsers(@Param('id') id: number, @Body('userIds') userIds: number[]) {
+    return this.entryService.addUsers(id, userIds);
+  }
+
+  @Post(':id/tag/:tagId')
+  assignToTag(@Param('id') id: number, @Param('tagId') tagId: number) {
+    return this.entryService.assignToTag(id, tagId);
   }
 }

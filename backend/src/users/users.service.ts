@@ -26,6 +26,14 @@ export class UsersService {
     return mapUserToGetUserDto(user);
   }
 
+  async findOneEntity(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`User entity with ID ${id} not found`);
+    }
+    return user; // Vráti celú entitu User
+  }
+
   async findOneByEmail(email: string): Promise<User | undefined> {
     return await this.userRepository.findOne({
       where: { email: email },
