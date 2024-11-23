@@ -4,7 +4,11 @@
     "save": "Save"
   },
   "validation": {
-    "requiredField": "Required Field"
+    "requiredField": "Required Field",
+    "passwordMismatch": "Passwords do not match",
+    "loginFailed": "Login failed. Please check your credentials.",
+    "serverError": "Server Error",
+    "networkError": "Network Error"
   },
   "views": {
     "login": {

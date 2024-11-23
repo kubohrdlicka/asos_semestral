@@ -279,7 +279,6 @@ const handleRegister = async () => {
     if (response.value?.ok) {
       console.log('Registration successful:', data.value)
 
-      // Redirect to dashboard after successful registration
       await router.push({ name: 'dashboard' })
     } else {
       console.error('Registration failed:', data.value)
