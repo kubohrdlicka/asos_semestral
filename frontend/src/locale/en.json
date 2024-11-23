@@ -17,6 +17,8 @@
     },
     "register": {
       "title": "Register",
+      "firstName": "First Name",
+      "lastName": "Last Name",
       "toLoginMessage": "Already have an account?",
       "registerCTA": "Register",
       "loginLinkCTA": "Login",
