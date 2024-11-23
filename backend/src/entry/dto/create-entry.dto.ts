@@ -6,6 +6,7 @@ import {
   IsDate,
   IsNumber,
 } from 'class-validator';
+import BaseDto from 'src/common/dto/base.dto';
 
 enum Type {
   NOTE = 'note',
@@ -24,7 +25,7 @@ export enum Status {
   DONE = 'Done',
 }
 
-export class CreateEntryDto {
+export class CreateEntryDto extends BaseDto {
   @ApiProperty({ enum: Type })
   @IsEnum(Type)
   type: Type;

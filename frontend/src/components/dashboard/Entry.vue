@@ -128,6 +128,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
 import StatusModal from '@/components/dashboard/StatusModal.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
+import { useApiFetch } from '@/composables/useApi'
 
 // Props
 const props = defineProps({
@@ -160,16 +161,38 @@ const statusLabels = {
   DONE: 'Done',
 }
 
-// Method for marking as Done
-const markAsDone = () => {
-  props.onStatusChange?.('DONE')
+// Handle Status Change
+const handleStatusChange = async (newStatus: string) => {
+  try {
+    const { response, data } = await useApiFetch(`entry/${props.entry.id}`)
+      .patch({
+        ...props.entry,
+        owner: undefined,
+        tag: undefined,
+        userGroup: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+        id: undefined,
+        status: newStatus,
+      })
+      .json()
+    console.log(props.entry)
+
+    if (response.value?.ok) {
+      console.log('Entry status updated successfully:', data.value)
+      props.onStatusChange?.(newStatus)
+    } else {
+      console.error(
+        'Failed to update entry status:',
+        response.value?.statusText
+      )
+    }
+  } catch (error) {
+    console.error('Error updating entry status:', error)
+  }
 }
 
-const handleStatusChange = (status: any) => {
-  console.log('STATUS SA ZMENIL NA: ', status)
-  console.log('ENTRY: ', props.entry)
-}
-
+// Status Modal Controls
 const [toggleStatusModal, visibleStatusModal, renderStatusModal] =
   useRenderToggleBindings('statusModal')
 </script>
