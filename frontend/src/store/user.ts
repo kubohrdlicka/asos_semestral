@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', {
       first_name: '',
       last_name: '',
       email: '',
+      createdAt: '',
     }
   },
 
@@ -24,6 +25,7 @@ export const useUserStore = defineStore('user', {
     getFirstName: (state) => state.first_name,
     getLastName: (state) => state.last_name,
     getEmail: (state) => state.email,
+    getCreatedAt: (state) => state.createdAt,
   },
 
   actions: {
@@ -32,6 +34,7 @@ export const useUserStore = defineStore('user', {
       this.setLastName('')
       this.setEmail('')
       this.setAccessToken('')
+      this.setCreatedAt('')
       this.setAuth(false)
 
       window.localStorage.removeItem('accessToken')
@@ -52,14 +55,19 @@ export const useUserStore = defineStore('user', {
     setEmail(email: string) {
       this.email = email
     },
+    setCreatedAt(createdAt: string) {
+      this.createdAt = createdAt
+    },
     async init() {
       const token = window.localStorage.getItem('accessToken')
       if (token) {
         const { response, data } = await useApiFetch('auth/me').get().json()
+        console.log(data.value)
         if (response.value?.status === 200) {
-          this.setFirstName(data.value.first_name)
-          this.setLastName(data.value.last_name)
+          this.setFirstName(data.value.firstName)
+          this.setLastName(data.value.lastName)
           this.setEmail(data.value.email)
+          this.setCreatedAt(data.value.createdAt)
           this.setAccessToken(token)
           this.setAuth(true)
         }

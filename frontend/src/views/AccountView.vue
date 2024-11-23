@@ -85,7 +85,7 @@
             <a
               href="#"
               class="items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >Delete Account</a
+              >Change password</a
             >
           </div>
         </div>
@@ -104,71 +104,84 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import {
-  CalendarDaysIcon,
-  EnvelopeIcon,
-  PhoneIcon,
-} from '@heroicons/vue/20/solid'
+import { ref, computed, onMounted } from 'vue'
+import { CalendarDaysIcon, EnvelopeIcon } from '@heroicons/vue/20/solid'
 import EditUserSideover from '@/components/sideover/EditUserSideover.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
+import { useUserStore } from '@/store/user'
+import { useApiFetch } from '@/composables/useApi'
 
-// Používateľské štatistiky
 const stats = [
   { label: 'Notes created', value: 12 },
   { label: 'Groups involved', value: 4 },
   { label: 'Tasks completed', value: 2 },
 ]
 
-// Reaktívne údaje používateľa
-const user = ref({
-  name: 'Meno Priezvisko',
-  firstName: 'Meno',
-  lastName: 'Priezvisko',
-  email: 'meno.priezvisko@gmail.com',
-  createdAt: '23.11.2024',
-  updatedAt: '23.11.2024',
-})
+const userStore = useUserStore()
 
-// Stav pre sideover
 const isSideoverOpen = ref(false)
 const savingInProgress = ref(false)
 
+// Reactive user data fetched from the user store
+const user = computed(() => ({
+  firstName: userStore.getFirstName,
+  lastName: userStore.getLastName,
+  email: userStore.getEmail,
+  createdAt: userStore.createdAt,
+}))
+
+// Sideover controls
 const [toggleEdit, visibleEdit, renderEdit] =
   useRenderToggleBindings('sideOver')
 
-// Funkcia na generovanie iniciál
+// Function to generate user initials
 const getUserInitials = (): string => {
   const firstInitial = user.value.firstName.charAt(0).toUpperCase()
   const lastInitial = user.value.lastName.charAt(0).toUpperCase()
   return `${firstInitial}${lastInitial}`
 }
 
-// Iniciály používateľa
 const userInitials = getUserInitials()
 
-// Funkcia na aktualizáciu používateľa
-const handleUserUpdate = async (updatedUser) => {
-  console.log('Starting user update:', updatedUser)
+const handleUserUpdate = async (updatedUser: {
+  firstName: string
+  lastName: string
+}) => {
   savingInProgress.value = true
 
   try {
-    // TODO: SEM PRIDAT NAMIESTO TOHO RIADKU NIZSIE NAPOJIT API a potom normalne z UserStore potiahnut nove aktualne udaje
-    await new Promise((resolve) => setTimeout(resolve, 2000)) // Simulácia oneskorenia
+    // Send PATCH request to update user details
+    const { response } = await useApiFetch('users')
+      .patch({
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+      })
+      .json()
 
-    // Aktualizácia hlavného používateľského objektu
-    user.value = updatedUser
-    console.log('User successfully updated:', updatedUser)
+    if (response.value?.ok) {
+      // Update user store with new data
+      userStore.setFirstName(updatedUser.firstName)
+      userStore.setLastName(updatedUser.lastName)
+
+      console.log('User successfully updated:', updatedUser)
+    } else {
+      console.error('Failed to update user:', response.value?.statusText)
+    }
   } catch (error) {
     console.error('Error updating user:', error)
-    // Tu môžete pridať chybu, ak je potrebné
   } finally {
     savingInProgress.value = false
-    toggleEdit(false) // Zavrie sideover
+    toggleEdit(false)
   }
 }
 
 const handleEditSideover = () => {
   isSideoverOpen.value = !isSideoverOpen.value
 }
+
+onMounted(async () => {
+  if (!userStore.isAuth) {
+    await userStore.init()
+  }
+})
 </script>
