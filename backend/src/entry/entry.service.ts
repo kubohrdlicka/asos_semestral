@@ -55,8 +55,22 @@ export class EntryService {
     return this.entryRepository.save(entry);
   }
 
-  async findAll(): Promise<Entry[]> {
-    return this.entryRepository.find({ relations: ['owner', 'tag'] });
+  // async findAll(user: User): Promise<Entry[]> {
+  // return this.entryRepository.find({
+  //   where: { owner: user },
+  //   relations: ['owner', 'tag', 'userGroup'],
+  // });
+  // }
+  async findAll(user: User): Promise<Entry[]> {
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .leftJoinAndSelect('entry.owner', 'owner')
+      .leftJoinAndSelect('entry.tag', 'tag')
+      .leftJoinAndSelect('entry.userGroup', 'userGroup')
+      .leftJoinAndSelect('userGroup.members', 'members')
+      .where('entry.owner.id = :userId', { userId: user.id }) // Entries, ktoré vlastní používateľ
+      .orWhere('members.id = :userId', { userId: user.id }) // Entries v skupinách, kde je členom
+      .getMany();
   }
 
   async findOne(id: number): Promise<Entry> {
@@ -120,23 +134,6 @@ export class EntryService {
   async remove(id: number): Promise<void> {
     const entry = await this.findOne(id);
     await this.entryRepository.remove(entry);
-  }
-
-  async addUsers(entryId: number, userIds: number[]): Promise<Entry> {
-    const entry = await this.findOne(entryId);
-
-    const users = await Promise.all(
-      userIds.map((id) => this.usersService.findOne(id)),
-    );
-    if (users.includes(undefined)) {
-      throw new NotFoundException('One or more users not found');
-    }
-
-    // Here you can modify ownership or manage multiple users
-    console.log(`Users [${userIds.join(', ')}] added to entry ${entryId}`);
-
-    return entry;
-    //TODO: pomocou usergroup
   }
 
   async assignToTag(entryId: number, tagId: number): Promise<Entry> {

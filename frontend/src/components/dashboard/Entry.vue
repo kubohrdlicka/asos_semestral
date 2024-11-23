@@ -45,15 +45,6 @@
 
     <!-- Actions -->
     <div class="flex flex-none items-center gap-x-4">
-      <!-- Checkbox for marking as Done -->
-      <input
-        v-if="entry.type !== 'note'"
-        type="checkbox"
-        :checked="entry.status === 'DONE'"
-        @change="markAsDone"
-        class="h-6 w-6 rounded-full border-gray-300 text-primary focus:ring-primary-500"
-      />
-
       <!-- Menu for additional actions -->
       <Menu as="div" class="relative flex-none">
         <MenuButton
@@ -84,6 +75,28 @@
                 Edit<span class="sr-only">, {{ entry.name }}</span>
               </a>
             </MenuItem>
+            <MenuItem v-if="entry.type !== 'note'" v-slot="{ active }">
+              <a
+                href="#"
+                :class="[
+                  active ? 'bg-gray-50 outline-none' : '',
+                  'block px-3 py-1 text-sm text-gray-900',
+                ]"
+                @click.prevent="toggleStatusModal(true)"
+              >
+                Change status<span class="sr-only">, {{ entry.name }}</span>
+              </a>
+            </MenuItem>
+            <MenuItem v-slot="{ active }">
+              <div
+                :class="[
+                  active ? 'bg-gray-50 outline-none' : '',
+                  'block px-3 py-1 text-sm text-gray-900',
+                ]"
+              >
+                Group Add/Remove<span class="sr-only">, {{ entry.name }}</span>
+              </div>
+            </MenuItem>
             <MenuItem v-slot="{ active }">
               <a
                 href="#"
@@ -99,6 +112,13 @@
         </transition>
       </Menu>
     </div>
+    <!-- Modal na zmenu statusu -->
+    <StatusModal
+      v-if="renderStatusModal"
+      :open="visibleStatusModal"
+      @statusChange="handleStatusChange"
+      @close="toggleStatusModal(false)"
+    />
   </div>
 </template>
 
@@ -106,6 +126,8 @@
 import { ref, defineProps } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import StatusModal from '@/components/dashboard/StatusModal.vue'
+import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 
 // Props
 const props = defineProps({
@@ -142,4 +164,11 @@ const statusLabels = {
 const markAsDone = () => {
   props.onStatusChange?.('DONE')
 }
+
+const handleStatusChange = (status: any) => {
+  console.log('STATUS SA ZMENIL NA: ', status)
+}
+
+const [toggleStatusModal, visibleStatusModal, renderStatusModal] =
+  useRenderToggleBindings('statusModal')
 </script>

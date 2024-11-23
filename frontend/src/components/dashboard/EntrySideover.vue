@@ -216,6 +216,7 @@ import {
 } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import LoadingIcon from '@/components/LoadingIcon.vue'
+import { useApiFetch } from '@/composables/useApi'
 
 // Key-Value objekty pre priority a status
 const priorityOptions = {
@@ -260,8 +261,11 @@ const entry = ref({
   tag: '',
   priority: '',
   description: '',
-  deadline: '',
+  deadline: null as Date | null,
   status: '',
+  color: '',
+  iconName: '',
+  tagId: 0,
 })
 
 // Methods
@@ -269,8 +273,39 @@ const handleClose = () => {
   emit('close')
 }
 
-const handleSubmit = () => {
-  emit('submit', entry.value)
-  console.log('ENTRY VLAUE', entry.value)
+const handleSubmit = async () => {
+  props.loading = true
+
+  try {
+    if (entry.value.deadline && !(entry.value.deadline instanceof Date)) {
+      entry.value.deadline = new Date(entry.value.deadline)
+    }
+
+    const { response, data } = await useApiFetch('entry')
+      .post({
+        type: entry.value.type,
+        name: entry.value.name,
+        priority: entry.value.priority,
+        description: entry.value.description,
+        deadline: entry.value.deadline,
+        status: entry.value.status,
+        color: entry.value.color,
+        iconName: entry.value.iconName,
+        tagId: entry.value.tagId,
+      })
+      .json()
+
+    if (response.value?.ok) {
+      console.log('Entry created successfully:', data.value)
+      emit('submit', entry.value)
+      handleClose()
+    } else {
+      console.error('Failed to create entry:', response.value?.statusText)
+    }
+  } catch (error) {
+    console.error('Error creating entry:', error)
+  } finally {
+    props.loading = false
+  }
 }
 </script>

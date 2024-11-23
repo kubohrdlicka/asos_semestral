@@ -108,16 +108,14 @@
           </div>
         </div>
       </div>
-
-      <!-- TASKY -->
-
-      <!-- Notes -->
     </div>
     <EntrySidover
       v-if="renderEdit"
       :open="visibleEdit"
       @close="toggleEdit(false)"
     ></EntrySidover>
+
+    
   </div>
 </template>
 
@@ -369,4 +367,6 @@ const filteredNotes = computed(() =>
 
 const [toggleEdit, visibleEdit, renderEdit] =
   useRenderToggleBindings('sideOver')
+
+
 </script>

@@ -23,8 +23,8 @@ export class EntryController {
   }
 
   @Get()
-  findAll() {
-    return this.entryService.findAll();
+  findAll(@LoggedInUser() user: User) {
+    return this.entryService.findAll(user);
   }
 
   @Get(':id')
@@ -44,11 +44,6 @@ export class EntryController {
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.entryService.remove(id);
-  }
-
-  @Post(':id/users')
-  addUsers(@Param('id') id: number, @Body('userIds') userIds: number[]) {
-    return this.entryService.addUsers(id, userIds);
   }
 
   @Post(':id/tag/:tagId')
