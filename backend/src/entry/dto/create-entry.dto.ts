@@ -35,6 +35,7 @@ export class CreateEntryDto {
 
   @ApiProperty({ enum: Priority })
   @IsEnum(Priority)
+  @IsOptional()
   priority: Priority;
 
   @ApiProperty()
@@ -49,6 +50,7 @@ export class CreateEntryDto {
 
   @ApiProperty({ enum: Status })
   @IsEnum(Status)
+  @IsOptional()
   status: Status;
 
   @ApiProperty()

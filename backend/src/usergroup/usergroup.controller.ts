@@ -75,4 +75,20 @@ export class UsergroupController {
   ) {
     return this.usergroupService.removeMember(+groupId, +memberId, admin);
   }
+
+  @Post(':id/entry/:entryId')
+  async addEntryToUsergroup(
+    @Param('id') groupId: string,
+    @Param('entryId') entryId: string,
+  ) {
+    return this.usergroupService.addEntry(+groupId, +entryId);
+  }
+
+  @Delete(':id/entry/:entryId')
+  async removeEntryFromUsergroup(
+    @Param('id') groupId: string,
+    @Param('entryId') entryId: string,
+  ) {
+    return this.usergroupService.removeEntry(+groupId, +entryId);
+  }
 }

@@ -46,11 +46,6 @@ export class EntryController {
     return this.entryService.remove(id);
   }
 
-  @Post(':id/users')
-  addUsers(@Param('id') id: number, @Body('userIds') userIds: number[]) {
-    return this.entryService.addUsers(id, userIds);
-  }
-
   @Post(':id/tag/:tagId')
   assignToTag(@Param('id') id: number, @Param('tagId') tagId: number) {
     return this.entryService.assignToTag(id, tagId);

@@ -13,6 +13,10 @@ export class AuthUserDto {
   @IsEmail()
   email: string;
 
+  @ApiProperty({
+    description: 'The first name of a user.',
+    example: 'John',
+  })
   @IsString()
   role: string;
 }
