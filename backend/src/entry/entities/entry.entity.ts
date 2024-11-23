@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Tag } from 'src/tag/entities/tag.entity';
-import e from 'express';
 import BaseEntity from 'src/common/entities/base.entity';
 
 export enum Priority {
@@ -14,6 +13,11 @@ export enum Status {
   TODO = 'TODO',
   IN_PROGRESS = 'In Progress',
   DONE = 'Done',
+}
+
+export enum Type {
+  NOTE = 'note',
+  TASK = 'task',
 }
 
 @Entity()
@@ -29,6 +33,9 @@ export class Entry extends BaseEntity {
 
   @Column({ type: 'enum', enum: Status })
   status: Status;
+
+  @Column({ type: 'enum', enum: Type })
+  type: Type;
 
   @Column()
   name: string;
