@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { GetUserDto } from './dto/get-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USERS_REPOSITORY } from 'src/common/constants';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -61,5 +62,31 @@ export class UsersService {
     delete savedUser.password;
 
     return mapUserToGetUserDto(savedUser);
+  }
+
+  async update(
+    user: User,
+    updateUserDto: UpdateUserDto,
+  ): Promise<GetUserDto | undefined> {
+    // const user = await this.userRepository.findOne({ where: { id } });
+    const id = user.id;
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    if (updateUserDto.password) {
+      user.password = updateUserDto.password;
+    }
+    if (updateUserDto.firstName) {
+      user.firstName = updateUserDto.firstName;
+    }
+    if (updateUserDto.lastName) {
+      user.lastName = updateUserDto.lastName;
+    }
+
+    const updatedUser = await this.userRepository.save(user);
+    delete updatedUser.password;
+
+    return mapUserToGetUserDto(updatedUser);
   }
 }

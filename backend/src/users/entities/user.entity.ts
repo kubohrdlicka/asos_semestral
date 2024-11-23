@@ -1,4 +1,11 @@
-import { BeforeInsert, Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 
 import { IsEmail } from 'class-validator';
 import BaseEntity from 'src/common/entities/base.entity';
@@ -22,6 +29,7 @@ export class User extends BaseEntity {
   password: string;
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
     try {
       this.password = await argon2.hash(this.password);
