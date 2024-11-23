@@ -3,16 +3,16 @@
     <!--  BASE LAYOUT HEADER - START   -->
     <Header
       v-if="route.name !== 'register' && route.name !== 'login'"
-      class="relative z-20 bg-gray-50"
+      class="relative z-20"
     />
     <!--  BASE LAYOUT HEADER - END   -->
-    <main class="relative min-w-[0] flex-grow bg-gray-50">
+    <main class="relative min-w-[0] flex-grow">
       <RouterView v-slot="{ Component }">
         <transition
           name="route"
           mode="out-in"
           :style="{
-            '--transition-duration': routeTransitionDuration + 'ms'
+            '--transition-duration': routeTransitionDuration + 'ms',
           }"
         >
           <component :is="Component" :key="route.path" />

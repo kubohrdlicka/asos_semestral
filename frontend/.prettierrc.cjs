@@ -1,6 +1,11 @@
 module.exports = {
   semi: false,
-  singleQuote: true,
   tabWidth: 2,
-  trailingComma: 'none'
+  useTabs: false,
+  printWidth: 80,
+  endOfLine: 'auto',
+  singleQuote: true,
+  trailingComma: 'es5',
+  bracketSpacing: true,
+  arrowParens: 'always'
 }
