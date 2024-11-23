@@ -96,4 +96,8 @@ export class UsersService {
 
     return mapUserToGetUserDto(updatedUser);
   }
+
+  async updatePassword(user: User) {
+    await this.userRepository.save(user);
+  }
 }
