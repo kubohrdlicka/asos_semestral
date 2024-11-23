@@ -65,8 +65,4 @@ export class CreateEntryDto {
   @IsOptional()
   @IsNumber()
   tagId?: number;
-
-  @ApiProperty()
-  @IsNumber()
-  ownerId: number;
 }
