@@ -4,7 +4,7 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { USER_GROUP_REPOSITORY } from '../common/constants';
 import { UserGroup } from './entities/usergroup.entity';
 import { CreateUsergroupDto } from './dto/create-usergroup.dto';
@@ -39,13 +39,21 @@ export class UsergroupService {
   }
 
   async findAll(user: User): Promise<UserGroup[]> {
-    return await this.userGroupRepository
-      .createQueryBuilder('userGroup')
-      .leftJoinAndSelect('userGroup.owner', 'owner')
-      .leftJoinAndSelect('userGroup.members', 'members')
-      .leftJoinAndSelect('userGroup.entries', 'entries')
-      .where('members.id = :userId', { userId: user.id })
+    const loggedInUserId = user.id;
+    const userGroups = await this.userGroupRepository
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.owner', 'owner')
+      .leftJoinAndSelect('group.members', 'members')
+      .leftJoinAndSelect('group.entries', 'entries')
+      .where('group.ownerId = :userId', { userId: loggedInUserId })
+      .orWhere('members.id = :userId', { userId: loggedInUserId })
       .getMany();
+    const userGroupIds = userGroups.map((group) => group.id);
+    const fullUserGroups = await this.userGroupRepository.find({
+      where: { id: In(userGroupIds) },
+      relations: ['owner', 'members', 'entries'],
+    });
+    return fullUserGroups;
   }
 
   // Získanie konkrétnej skupiny
