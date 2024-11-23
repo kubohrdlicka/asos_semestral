@@ -21,6 +21,17 @@ services:
     depends_on:
       - db
 
+  frontend:
+    image: frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+
   db:
     container_name: postgres-db-dev
     image: postgres:13
