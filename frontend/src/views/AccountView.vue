@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="mt-5 flex justify-center sm:mt-0">
-              <!-- Zmena na tlačidlo -->
+              <!-- Edit Profile Button -->
               <button
                 type="button"
                 class="flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500"
@@ -44,7 +44,6 @@
             class="px-6 py-5 text-center text-sm font-medium"
           >
             <span class="text-primary">{{ stat.value }}</span>
-            {{ ' ' }}
             <span class="text-gray-600">{{ stat.label }}</span>
           </div>
         </div>
@@ -82,16 +81,20 @@
             </div>
           </dl>
           <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-            <a
-              href="#"
+            <!-- Change Password Button -->
+            <button
+              type="button"
               class="items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              >Change password</a
+              @click="toggleChangePassword(true)"
             >
+              Change password
+            </button>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Edit Profile Sideover -->
     <EditUserSideover
       v-if="renderEdit"
       :modelValue="user"
@@ -100,6 +103,15 @@
       @submit="handleUserUpdate"
       @close="toggleEdit(false)"
     />
+
+    <!-- Change Password Sideover -->
+    <ChangePasswordSideover
+      v-if="renderChangePassword"
+      :open="visibleChangePassword"
+      :loading="savingInProgress"
+      @submit="handleChangePassword"
+      @close="toggleChangePassword(false)"
+    />
   </div>
 </template>
 
@@ -107,6 +119,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { CalendarDaysIcon, EnvelopeIcon } from '@heroicons/vue/20/solid'
 import EditUserSideover from '@/components/sideover/EditUserSideover.vue'
+import ChangePasswordSideover from '@/components/sideover/ChangePasswordSideover.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import { useUserStore } from '@/store/user'
 import { useApiFetch } from '@/composables/useApi'
@@ -119,22 +132,22 @@ const stats = [
 
 const userStore = useUserStore()
 
-const isSideoverOpen = ref(false)
 const savingInProgress = ref(false)
 
-// Reactive user data fetched from the user store
+const [toggleEdit, visibleEdit, renderEdit] =
+  useRenderToggleBindings('sideOverEdit')
+
+const [toggleChangePassword, visibleChangePassword, renderChangePassword] =
+  useRenderToggleBindings('sideOverChangePassword')
+
 const user = computed(() => ({
   firstName: userStore.getFirstName,
   lastName: userStore.getLastName,
   email: userStore.getEmail,
-  createdAt: userStore.createdAt,
+  createdAt: userStore.createdAt || 'N/A',
 }))
 
-// Sideover controls
-const [toggleEdit, visibleEdit, renderEdit] =
-  useRenderToggleBindings('sideOver')
 
-// Function to generate user initials
 const getUserInitials = (): string => {
   const firstInitial = user.value.firstName.charAt(0).toUpperCase()
   const lastInitial = user.value.lastName.charAt(0).toUpperCase()
@@ -150,7 +163,6 @@ const handleUserUpdate = async (updatedUser: {
   savingInProgress.value = true
 
   try {
-    // Send PATCH request to update user details
     const { response } = await useApiFetch('users')
       .patch({
         firstName: updatedUser.firstName,
@@ -159,10 +171,8 @@ const handleUserUpdate = async (updatedUser: {
       .json()
 
     if (response.value?.ok) {
-      // Update user store with new data
       userStore.setFirstName(updatedUser.firstName)
       userStore.setLastName(updatedUser.lastName)
-
       console.log('User successfully updated:', updatedUser)
     } else {
       console.error('Failed to update user:', response.value?.statusText)
@@ -175,8 +185,31 @@ const handleUserUpdate = async (updatedUser: {
   }
 }
 
-const handleEditSideover = () => {
-  isSideoverOpen.value = !isSideoverOpen.value
+const handleChangePassword = async (passwords: {
+  oldPassword: string
+  newPassword: string
+  confirmPassword: string
+}) => {
+  savingInProgress.value = true
+
+  console.log(passwords)
+
+  try {
+    const { response } = await useApiFetch('auth/reset-password')
+      .patch(passwords)
+      .json()
+
+    if (response.value?.ok) {
+      console.log('Password changed successfully!')
+      toggleChangePassword(false)
+    } else {
+      console.error('Failed to change password:', response.value?.statusText)
+    }
+  } catch (err) {
+    console.error('Error changing password:', err)
+  } finally {
+    savingInProgress.value = false
+  }
 }
 
 onMounted(async () => {
