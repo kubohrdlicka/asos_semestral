@@ -44,6 +44,7 @@
             class="px-6 py-5 text-center text-sm font-medium"
           >
             <span class="text-primary">{{ stat.value }}</span>
+            {{ ' ' }}
             <span class="text-gray-600">{{ stat.label }}</span>
           </div>
         </div>
@@ -124,11 +125,11 @@ import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import { useUserStore } from '@/store/user'
 import { useApiFetch } from '@/composables/useApi'
 
-const stats = [
-  { label: 'Notes created', value: 12 },
-  { label: 'Groups involved', value: 4 },
-  { label: 'Tasks completed', value: 2 },
-]
+const stats = ref([
+  { label: 'Notes created', value: 0 },
+  { label: 'Groups involved', value: 0 },
+  { label: 'Tasks completed', value: 0 },
+])
 
 const userStore = useUserStore()
 
@@ -220,9 +221,32 @@ const handleChangePassword = async (passwords: {
   }
 }
 
+const fetchStats = async () => {
+  savingInProgress.value = true
+
+  try {
+    const { response, data } = await useApiFetch('users/stats').get().json()
+
+    if (response.value?.ok && data.value) {
+      stats.value = [
+        { label: 'Notes created', value: data.value.totalTasksCreated },
+        { label: 'Groups involved', value: data.value.totalGroups },
+        { label: 'Tasks completed', value: data.value.completedTasks },
+      ]
+    } else {
+      console.error('Failed to fetch user stats:', response.value?.statusText)
+    }
+  } catch (error) {
+    console.error('Error fetching user stats:', error)
+  } finally {
+    savingInProgress.value = false
+  }
+}
+
 onMounted(async () => {
   if (!userStore.isAuth) {
     await userStore.init()
   }
+  fetchStats()
 })
 </script>
