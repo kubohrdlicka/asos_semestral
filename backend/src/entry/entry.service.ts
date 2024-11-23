@@ -55,8 +55,22 @@ export class EntryService {
     return this.entryRepository.save(entry);
   }
 
-  async findAll(): Promise<Entry[]> {
-    return this.entryRepository.find({ relations: ['owner', 'tag'] });
+  // async findAll(user: User): Promise<Entry[]> {
+  // return this.entryRepository.find({
+  //   where: { owner: user },
+  //   relations: ['owner', 'tag', 'userGroup'],
+  // });
+  // }
+  async findAll(user: User): Promise<Entry[]> {
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .leftJoinAndSelect('entry.owner', 'owner')
+      .leftJoinAndSelect('entry.tag', 'tag')
+      .leftJoinAndSelect('entry.userGroup', 'userGroup')
+      .leftJoinAndSelect('userGroup.members', 'members')
+      .where('entry.owner.id = :userId', { userId: user.id }) // Entries, ktoré vlastní používateľ
+      .orWhere('members.id = :userId', { userId: user.id }) // Entries v skupinách, kde je členom
+      .getMany();
   }
 
   async findOne(id: number): Promise<Entry> {
