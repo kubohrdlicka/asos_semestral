@@ -71,14 +71,6 @@
             </div>
             <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
               <dt class="flex-none">
-                <PhoneIcon class="h-6 w-5 text-gray-400" aria-hidden="true" />
-              </dt>
-              <dd class="text-sm/6 text-gray-500">
-                <time datetime="2023-01-31">{{ user.phone }}</time>
-              </dd>
-            </div>
-            <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
-              <dt class="flex-none">
                 <CalendarDaysIcon
                   class="h-6 w-5 text-gray-400"
                   aria-hidden="true"
@@ -134,7 +126,6 @@ const user = ref({
   firstName: 'Meno',
   lastName: 'Priezvisko',
   email: 'meno.priezvisko@gmail.com',
-  phone: '+421910123123',
   createdAt: '23.11.2024',
   updatedAt: '23.11.2024',
 })
