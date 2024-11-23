@@ -42,14 +42,10 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<GetUserDto | undefined> {
-    try {
-      const user = this.userRepository.create(createUserDto);
-      const savedUser = await this.userRepository.save(user);
-      delete savedUser.password;
+    const user = this.userRepository.create(createUserDto);
+    const savedUser = await this.userRepository.save(user);
+    delete savedUser.password;
 
-      return mapUserToGetUserDto(savedUser);
-    } catch (e) {
-      console.log('e', e);
-    }
+    return mapUserToGetUserDto(savedUser);
   }
 }
