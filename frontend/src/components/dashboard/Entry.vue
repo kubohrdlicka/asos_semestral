@@ -104,6 +104,7 @@
                   active ? 'bg-gray-50 outline-none' : '',
                   'block px-3 py-1 text-sm text-gray-900',
                 ]"
+                @click.prevent="handleDelete"
               >
                 Delete<span class="sr-only">, {{ entry.name }}</span>
               </a>
@@ -135,6 +136,10 @@ const props = defineProps({
   entry: {
     type: Object as PropType<any>,
     required: true,
+  },
+  onDelete: {
+    type: Function as PropType<(id: number) => void>,
+    required: false,
   },
   onStatusChange: {
     type: Function as PropType<(newStatus: string) => void>,
@@ -176,7 +181,6 @@ const handleStatusChange = async (newStatus: string) => {
         status: newStatus,
       })
       .json()
-    console.log(props.entry)
 
     if (response.value?.ok) {
       console.log('Entry status updated successfully:', data.value)
@@ -189,6 +193,22 @@ const handleStatusChange = async (newStatus: string) => {
     }
   } catch (error) {
     console.error('Error updating entry status:', error)
+  }
+}
+
+// Handle Delete
+const handleDelete = async () => {
+  try {
+    const { response } = await useApiFetch(`entry/${props.entry.id}`).delete()
+
+    if (response.value?.ok) {
+      console.log('Entry deleted successfully')
+      props.onDelete?.(props.entry.id)
+    } else {
+      console.error('Failed to delete entry:', response.value?.statusText)
+    }
+  } catch (error) {
+    console.error('Error deleting entry:', error)
   }
 }
 
