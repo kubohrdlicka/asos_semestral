@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { TagService } from 'src/tag/tag.service';
 import { ENTRY_REPOSITORY } from 'src/common/constants';
 import { Priority, Status } from './dto/create-entry.dto';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class EntryService {
@@ -19,13 +20,13 @@ export class EntryService {
     private readonly tagsService: TagService,
   ) {}
 
-  async create(createEntryDto: CreateEntryDto): Promise<Entry> {
-    const { ownerId, tagId, priority, status, ...rest } = createEntryDto;
+  async create(createEntryDto: CreateEntryDto, user: User): Promise<Entry> {
+    const { tagId, priority, status, ...rest } = createEntryDto;
 
     // Použitie findOneEntity na získanie celej entity User
-    const owner = await this.usersService.findOneEntity(ownerId);
+    const owner = await this.usersService.findOneEntity(user.id);
     if (!owner) {
-      throw new NotFoundException(`User with ID ${ownerId} not found`);
+      throw new NotFoundException(`User with ID ${user.id} not found`);
     }
 
     // Validate tag (optional)
@@ -69,17 +70,17 @@ export class EntryService {
     return entry;
   }
 
-  async update(id: number, updateEntryDto: UpdateEntryDto): Promise<Entry> {
+  async update(
+    id: number,
+    updateEntryDto: UpdateEntryDto,
+    user: User,
+  ): Promise<Entry> {
     const entry = await this.findOne(id);
 
-    if (updateEntryDto.ownerId) {
-      const owner = await this.usersService.findOneEntity(
-        updateEntryDto.ownerId,
-      );
+    if (user.id) {
+      const owner = await this.usersService.findOneEntity(user.id);
       if (!owner) {
-        throw new NotFoundException(
-          `User with ID ${updateEntryDto.ownerId} not found`,
-        );
+        throw new NotFoundException(`User with ID ${user.id} not found`);
       }
       entry.owner = owner;
     }

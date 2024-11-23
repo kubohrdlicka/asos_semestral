@@ -10,5 +10,6 @@ import { TagModule } from '../tag/tag.module';
   imports: [DatabaseModule, UsersModule, TagModule],
   controllers: [EntryController],
   providers: [EntryService, ...entryProviders],
+  exports: [EntryService],
 })
 export class EntryModule {}

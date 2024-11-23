@@ -10,14 +10,16 @@ import {
 import { EntryService } from './entry.service';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { UpdateEntryDto } from './dto/update-entry.dto';
+import { LoggedInUser } from '../users/decorators/user.decorator';
+import { User } from '../users/entities/user.entity';
 
 @Controller('entry')
 export class EntryController {
   constructor(private readonly entryService: EntryService) {}
 
   @Post()
-  create(@Body() createEntryDto: CreateEntryDto) {
-    return this.entryService.create(createEntryDto);
+  create(@Body() createEntryDto: CreateEntryDto, @LoggedInUser() user: User) {
+    return this.entryService.create(createEntryDto, user);
   }
 
   @Get()
@@ -31,8 +33,12 @@ export class EntryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateEntryDto: UpdateEntryDto) {
-    return this.entryService.update(id, updateEntryDto);
+  update(
+    @Param('id') id: number,
+    @Body() updateEntryDto: UpdateEntryDto,
+    @LoggedInUser() user: User,
+  ) {
+    return this.entryService.update(id, updateEntryDto, user);
   }
 
   @Delete(':id')
