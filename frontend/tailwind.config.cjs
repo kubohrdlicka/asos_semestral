@@ -6,21 +6,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#e6fefd',
-          100: '#cefdfb',
-          200: '#83fbf5',
-          300: '#52faf1',
-          400: '#05ada5',
-          500: '#047c76',
-          600: '#035c58',
-          700: '#024a47',
-          800: '#02312f',
-          900: '#011918'
-        }
+        primary: "#2F3C7E",
+        secondary: "#FBEAEB"
       },
       fontFamily: {
         kanit: ['Kanit', ...defaultTheme.fontFamily.sans],
+        'sans': ['ui-sans-serif', 'system-ui'],
+        'serif': ['ui-serif', 'Georgia'],
+        'display': ['Oswald'],
       },
     }
   },

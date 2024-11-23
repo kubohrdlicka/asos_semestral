@@ -32,6 +32,6 @@ const router = createRouter({
 })
 
 // FIXME: allow later
-//useAuthGuard(router)
+useAuthGuard(router)
 
 export default router
