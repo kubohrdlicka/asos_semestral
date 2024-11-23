@@ -1,10 +1,14 @@
 <template>
-  <header class="bg-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 border-b border-gray-300">
+  <header
+    class="bg-primary-100 bg-gradient-to-r from-primary-50 to-primary-100 border-b border-gray-300"
+  >
     <nav
       class="flex items-center justify-between p-6 lg:px-8"
       aria-label="Global"
     >
-      <div class="flex lg:flex-1 text-2xl font-bold text-primary font-sans">Dashboard</div>
+      <div class="flex lg:flex-1 text-2xl font-bold text-primary font-sans">
+        ONTRACK
+      </div>
       <div class="hidden lg:flex lg:gap-x-12">
         <router-link
           v-for="item in navigation"
@@ -20,7 +24,10 @@
         > -->
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a @click="logout" class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+        <a
+          @click="logout"
+          class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer"
+        >
           Log out <span aria-hidden="true">&rarr;</span>
         </a>
       </div>

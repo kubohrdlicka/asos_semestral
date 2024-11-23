@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen w-full flex-col">
     <!--  BASE LAYOUT HEADER - END   -->
-    <main class="relative min-w-[0] flex-grow bg-gray-50">
+    <main class="relative min-w-[0] flex-grow ">
       <RouterView v-slot="{ Component }">
         <transition
           name="route"
