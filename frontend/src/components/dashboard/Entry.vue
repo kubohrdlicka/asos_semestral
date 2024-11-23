@@ -167,6 +167,7 @@ const markAsDone = () => {
 
 const handleStatusChange = (status: any) => {
   console.log('STATUS SA ZMENIL NA: ', status)
+  console.log('ENTRY: ', props.entry)
 }
 
 const [toggleStatusModal, visibleStatusModal, renderStatusModal] =

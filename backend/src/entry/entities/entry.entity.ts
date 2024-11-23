@@ -34,10 +34,10 @@ export class Entry extends BaseEntity {
   @ManyToOne(() => Tag, (tag) => tag.entries, { nullable: true })
   tag: Tag;
 
-  @Column({ type: 'enum', enum: Priority })
+  @Column({ type: 'enum', enum: Priority, nullable: true })
   priority: Priority;
 
-  @Column({ type: 'enum', enum: Status })
+  @Column({ type: 'enum', enum: Status, nullable: true })
   status: Status;
 
   @Column({ type: 'enum', enum: Type, nullable: true })

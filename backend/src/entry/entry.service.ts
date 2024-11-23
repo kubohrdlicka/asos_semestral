@@ -32,15 +32,6 @@ export class EntryService {
     // Validate tag (optional)
     const tag = tagId ? await this.tagsService.findOne(tagId) : null;
 
-    // Validate priority and status
-    if (!Object.values(Priority).includes(priority)) {
-      throw new NotFoundException(`Invalid priority value: ${priority}`);
-    }
-
-    if (!Object.values(Status).includes(status)) {
-      throw new NotFoundException(`Invalid status value: ${status}`);
-    }
-
     const entry = this.entryRepository.create({
       ...rest,
       priority,

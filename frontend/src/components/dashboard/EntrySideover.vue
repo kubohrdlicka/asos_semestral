@@ -99,7 +99,7 @@
                       </div>
 
                       <!-- Priority -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="priority"
                           class="block text-sm font-medium text-gray-700"
@@ -136,7 +136,7 @@
                       </div>
 
                       <!-- Deadline -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="deadline"
                           class="block text-sm font-medium text-gray-700"
@@ -151,7 +151,7 @@
                       </div>
 
                       <!-- Status -->
-                      <div>
+                      <div v-if="entry.type == 'task'">
                         <label
                           for="status"
                           class="block text-sm font-medium text-gray-700"
@@ -218,7 +218,7 @@ import { XMarkIcon } from '@heroicons/vue/24/outline'
 import LoadingIcon from '@/components/LoadingIcon.vue'
 import { useApiFetch } from '@/composables/useApi'
 
-// Key-Value objekty pre priority a status
+// Key-Value objects for priority and status
 const priorityOptions = {
   low: 'Low',
   medium: 'Medium',
@@ -281,19 +281,25 @@ const handleSubmit = async () => {
       entry.value.deadline = new Date(entry.value.deadline)
     }
 
-    const { response, data } = await useApiFetch('entry')
-      .post({
-        type: entry.value.type,
-        name: entry.value.name,
-        priority: entry.value.priority,
-        description: entry.value.description,
-        deadline: entry.value.deadline,
-        status: entry.value.status,
-        color: entry.value.color,
-        iconName: entry.value.iconName,
-        tagId: entry.value.tagId,
-      })
-      .json()
+    const payload: Record<string, any> = {
+      type: entry.value.type,
+      name: entry.value.name,
+      description: entry.value.description,
+      deadline: entry.value.deadline,
+      color: entry.value.color,
+      iconName: entry.value.iconName,
+      tagId: entry.value.tagId,
+    }
+
+    if (entry.value.priority) {
+      payload.priority = entry.value.priority
+    }
+
+    if (entry.value.status) {
+      payload.status = entry.value.status
+    }
+
+    const { response, data } = await useApiFetch('entry').post(payload).json()
 
     if (response.value?.ok) {
       console.log('Entry created successfully:', data.value)
