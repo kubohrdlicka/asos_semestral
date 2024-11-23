@@ -15,7 +15,7 @@ import * as argon2 from 'argon2';
 
 @Entity()
 export class User extends BaseEntity {
-  @Column()
+  @Column({ unique: true, nullable: false })
   @IsEmail()
   email: string;
 
