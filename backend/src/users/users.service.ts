@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { mapUserToGetUserDto } from './mappers/user.mapper';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -42,8 +47,17 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<GetUserDto | undefined> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Email already in use');
+    }
+
     const user = this.userRepository.create(createUserDto);
     const savedUser = await this.userRepository.save(user);
+
     delete savedUser.password;
 
     return mapUserToGetUserDto(savedUser);
