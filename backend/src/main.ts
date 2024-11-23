@@ -10,6 +10,11 @@ async function bootstrap() {
     .setDescription('Task manager API description')
     .setVersion('1.0')
     .build();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
