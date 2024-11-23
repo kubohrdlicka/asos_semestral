@@ -7,7 +7,9 @@ import { useInitialized } from '@/composables/useInitialized'
 const noAuthWhitelist: RouteRecordName[] = [
   'register',
   'login',
-  'taskboard'
+  'dashboard',
+  'profile',
+  'groups'
 ]
 
 
@@ -28,7 +30,7 @@ export default function useAuthGuard(router: Router) {
     const { isSigned, authSyncedAtLeastOnce } = storeToRefs(useUserStore())
     try {
       await until(authSyncedAtLeastOnce).toBe(true, {
-        timeout: 1000,
+        timeout: 100,
         throwOnTimeout: true,
       })
 
