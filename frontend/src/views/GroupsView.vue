@@ -95,6 +95,12 @@
                         scope="col"
                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        Ownership
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         Invite code
                       </th>
                       <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
@@ -107,12 +113,12 @@
                       <td
                         class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"
                       >
-                        {{ group.name }}
+                        {{ group?.name }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
-                        {{ group.description || 'N/A' }}
+                        {{ group?.description || 'N/A' }}
                       </td>
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
@@ -128,18 +134,36 @@
                       <td
                         class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                       >
+                        {{ isOwner(group) ? 'Owner' : 'Member' }}
+                      </td>
+                      <td
+                        class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      >
                         {{ group?.inviteCode }}
                       </td>
                       <td
                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"
                       >
-                        <a
+                        <button
                           href="#"
                           class="text-indigo-600 hover:text-indigo-900"
-                          >Edit<span class="sr-only"
-                            >, {{ group.name }}</span
-                          ></a
+                          v-if="isOwner(group)"
+                          @click="removeGroup(group)"
                         >
+                          Remove group<span class="sr-only"
+                            >, {{ group.name }}</span
+                          >
+                        </button>
+                        <button
+                          href="#"
+                          class="text-indigo-600 hover:text-indigo-900"
+                          v-if="!isOwner(group)"
+                          @click="removeMeFromGroup(group)"
+                        >
+                          Leave group<span class="sr-only"
+                            >, {{ group.name }}</span
+                          >
+                        </button>
                       </td>
                     </tr>
                   </tbody>
@@ -169,6 +193,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import UserGroupSideover from '@/components/sideover/UserGroupSideover.vue'
 import JoinGroup from '@/components/usergroup/JoinGroup.vue'
+import { useUserStore } from '@/store/user'
 
 const tabs = [{ name: 'My groups' }, { name: 'Join group' }]
 
@@ -179,6 +204,8 @@ const setActiveTab = (tabName) => {
   activeTab.value = tabName
 }
 
+const userId = useUserStore().id
+
 const savingInProgress = ref(false)
 const userGroupStore = useUserGroupStore()
 const groups = computed(() => userGroupStore.userGroups)
@@ -187,6 +214,14 @@ const [toggleEdit, visibleEdit, renderEdit] =
 const handleGroupCreate = async (newGroup) => {
   toggleEdit(false)
   await useUserGroupStore().addUserGroup(newGroup)
+}
+const isOwner = (group: any) => +group.owner.id === +userId
+
+const removeGroup = (group) => {
+  useUserGroupStore().removeUserGroup(group.id)
+}
+const removeMeFromGroup = (group) => {
+  useUserGroupStore().leaveUserGroup(group.id)
 }
 
 onMounted(async () => {

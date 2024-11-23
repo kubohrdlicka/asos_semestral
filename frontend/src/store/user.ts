@@ -16,6 +16,7 @@ export const useUserStore = defineStore('user', {
       last_name: '',
       email: '',
       createdAt: '',
+      id: 0,
     }
   },
 
@@ -58,6 +59,9 @@ export const useUserStore = defineStore('user', {
     setCreatedAt(createdAt: string) {
       this.createdAt = createdAt
     },
+    setId(id: number) {
+      this.id = id
+    },
     async init() {
       const token = window.localStorage.getItem('accessToken')
       if (token) {
@@ -70,6 +74,7 @@ export const useUserStore = defineStore('user', {
           this.setCreatedAt(data.value.createdAt)
           this.setAccessToken(token)
           this.setAuth(true)
+          this.setId(data.value.id)
         }
         if (response.value?.status === 401) {
           window.localStorage.removeItem('accessToken')

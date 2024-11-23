@@ -23,7 +23,8 @@
           >Log in <span aria-hidden="true">&rarr;</span></a
         > -->
       </div>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+      <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
+        <p class="font-normal">{{ firstName }} {{ lastName }}</p>
         <a
           @click="logout"
           class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer"
@@ -39,6 +40,8 @@ import { ref } from 'vue'
 import { useUserStore } from '../../store/user'
 import router from '../../router'
 const userStore = useUserStore()
+const firstName = userStore.first_name
+const lastName = userStore.last_name
 
 const navigation = [
   { name: 'Dashboard', route: 'dashboard' },

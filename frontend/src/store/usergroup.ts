@@ -62,8 +62,25 @@ export const useUserGroupStore = defineStore('userGroup', {
         this.isLoading = false
       }
     },
-    removeUserGroup(groupId: string) {
-      this.userGroups = this.userGroups.filter((group) => group.id !== groupId)
+    async removeUserGroup(groupId: string) {
+      this.isLoading = true
+      try {
+        const { response } = await useApiFetch(`usergroup/${groupId}`)
+          .delete()
+          .json()
+        if (response.value?.ok) {
+          this.userGroups = this.userGroups.filter(
+            (group) => group.id !== groupId
+          )
+          await this.fetchUserGroups()
+        } else {
+          console.error('Failed to delete group:', response.value?.statusText)
+        }
+      } catch (error) {
+        console.error('Error deleting group:', error)
+      } finally {
+        this.isLoading = false
+      }
     },
     async joinUserGroup(joinCode: string) {
       this.isLoading = true
@@ -79,6 +96,24 @@ export const useUserGroupStore = defineStore('userGroup', {
         }
       } catch (error) {
         console.error('Error joining group:', error)
+      } finally {
+        this.isLoading = false
+      }
+    },
+    async leaveUserGroup(groupId: string) {
+      this.isLoading = true
+      try {
+        const { response } = await useApiFetch(`usergroup/${groupId}/me`)
+          .delete()
+          .json()
+        if (response.value?.ok) {
+          this.userGroups = this.userGroups.filter((g) => g.id !== groupId)
+          await this.fetchUserGroups()
+        } else {
+          console.error('Failed to leave group:', response.value?.statusText)
+        }
+      } catch (error) {
+        console.error('Error leaving group:', error)
       } finally {
         this.isLoading = false
       }

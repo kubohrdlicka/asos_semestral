@@ -106,7 +106,6 @@ export class UsergroupService {
     inviteCode: string,
     user: User,
   ): Promise<UserGroup> {
-    console.log('inviteCode', inviteCode);
     const userGroup = await this.userGroupRepository.findOne({
       where: { inviteCode },
       relations: ['members'],
