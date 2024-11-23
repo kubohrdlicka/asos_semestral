@@ -13,7 +13,9 @@ export class EntryService {
   constructor(
     @Inject(ENTRY_REPOSITORY)
     private readonly entryRepository: Repository<Entry>,
+    @Inject(UsersService)
     private readonly usersService: UsersService,
+    @Inject(TagService)
     private readonly tagsService: TagService,
   ) {}
 
