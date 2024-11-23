@@ -140,13 +140,21 @@ const [toggleEdit, visibleEdit, renderEdit] =
 const [toggleChangePassword, visibleChangePassword, renderChangePassword] =
   useRenderToggleBindings('sideOverChangePassword')
 
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('sk-SK', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  }).format(date)
+}
+
 const user = computed(() => ({
   firstName: userStore.getFirstName,
   lastName: userStore.getLastName,
   email: userStore.getEmail,
-  createdAt: userStore.createdAt || 'N/A',
+  createdAt: userStore.createdAt ? formatDate(userStore.createdAt) : 'N/A',
 }))
-
 
 const getUserInitials = (): string => {
   const firstInitial = user.value.firstName.charAt(0).toUpperCase()
