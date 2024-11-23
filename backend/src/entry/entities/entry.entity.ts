@@ -40,7 +40,7 @@ export class Entry extends BaseEntity {
   @Column({ type: 'enum', enum: Status })
   status: Status;
 
-  @Column({ type: 'enum', enum: Type })
+  @Column({ type: 'enum', enum: Type, nullable: true })
   type: Type;
 
   @Column()
