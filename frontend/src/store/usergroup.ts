@@ -65,6 +65,24 @@ export const useUserGroupStore = defineStore('userGroup', {
     removeUserGroup(groupId: string) {
       this.userGroups = this.userGroups.filter((group) => group.id !== groupId)
     },
+    async joinUserGroup(joinCode: string) {
+      this.isLoading = true
+      try {
+        const { response, data } = await useApiFetch(`usergroup/${joinCode}`)
+          .post()
+          .json()
+        if (response.value?.ok) {
+          this.userGroups.push(data.value)
+          this.fetchUserGroups()
+        } else {
+          console.error('Failed to join group:', response.value?.statusText)
+        }
+      } catch (error) {
+        console.error('Error joining group:', error)
+      } finally {
+        this.isLoading = false
+      }
+    },
     updateUserGroup(updatedGroup: UserGroupDto) {
       const index = this.userGroups.findIndex(
         (group) => group.id === updatedGroup.id
