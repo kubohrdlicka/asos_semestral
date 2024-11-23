@@ -200,12 +200,14 @@
 import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router' // Import the router hook
+import { useRouter } from 'vue-router'
 import LoadingIcon from '@/components/LoadingIcon.vue'
 import { useApiFetch } from '@/composables/useApi'
+import { useUserStore } from '@/store/user'
 
 const { t } = useI18n()
-const router = useRouter() // Create a router instance
+const router = useRouter()
+const store = useUserStore()
 
 const form = ref({
   firstName: null,
@@ -278,6 +280,9 @@ const handleRegister = async () => {
 
     if (response.value?.ok) {
       console.log('Registration successful:', data.value)
+      store.setAuth(true)
+      store.setAccessToken(data.value.access_token)
+      await store.init()
 
       await router.push({ name: 'dashboard' })
     } else {
