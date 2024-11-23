@@ -16,6 +16,7 @@ export class UpdateUserDto {
     example: 'Doe',
     required: false,
   })
+  @ApiProperty()
   @IsOptional()
   @IsString()
   lastName?: string;

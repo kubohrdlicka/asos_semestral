@@ -122,23 +122,6 @@ export class EntryService {
     await this.entryRepository.remove(entry);
   }
 
-  async addUsers(entryId: number, userIds: number[]): Promise<Entry> {
-    const entry = await this.findOne(entryId);
-
-    const users = await Promise.all(
-      userIds.map((id) => this.usersService.findOne(id)),
-    );
-    if (users.includes(undefined)) {
-      throw new NotFoundException('One or more users not found');
-    }
-
-    // Here you can modify ownership or manage multiple users
-    console.log(`Users [${userIds.join(', ')}] added to entry ${entryId}`);
-
-    return entry;
-    //TODO: pomocou usergroup
-  }
-
   async assignToTag(entryId: number, tagId: number): Promise<Entry> {
     const entry = await this.findOne(entryId);
     const tag = await this.tagsService.findOne(tagId);

@@ -21,7 +21,7 @@ export class UserGroup extends BaseEntity {
   @JoinTable()
   members: User[];
 
-  @OneToMany(() => Entry, (entry) => entry.owner)
+  @OneToMany(() => Entry, (entry) => entry.userGroup)
   entries: Entry[];
 
   @Column()
