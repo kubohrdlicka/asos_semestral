@@ -132,11 +132,13 @@ import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/store/user';
 import LoadingIcon from '@/components/LoadingIcon.vue'
 import { useApiFetch } from '@/composables/useApi'
 
 const { t } = useI18n()
 const router = useRouter()
+const store = useUserStore()
 
 const form = ref({
   username: null,
@@ -180,6 +182,9 @@ const handleLogin = async () => {
 
     if (response.value?.ok) {
       console.log('Login successful:', data.value)
+      store.setAccessToken(data.value.access_token)
+      store.setAuth(true)
+      await store.init()
 
       await router.push({ name: 'dashboard' })
     } else {
