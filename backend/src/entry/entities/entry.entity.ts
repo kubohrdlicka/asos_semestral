@@ -16,6 +16,11 @@ export enum Status {
   DONE = 'Done',
 }
 
+export enum Type {
+  NOTE = 'note',
+  TASK = 'task',
+}
+
 @Entity()
 export class Entry extends BaseEntity {
   @ManyToOne(() => User, (user) => user.entries)
@@ -29,6 +34,9 @@ export class Entry extends BaseEntity {
 
   @Column({ type: 'enum', enum: Status })
   status: Status;
+
+  @Column({ type: 'enum', enum: Type })
+  type: Type;
 
   @Column()
   name: string;
