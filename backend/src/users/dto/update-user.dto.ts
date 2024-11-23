@@ -19,14 +19,4 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   lastName?: string;
-
-  @ApiProperty({
-    description: 'New password for the user (optional)',
-    example: 'strongPassword123',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
-  password?: string;
 }
