@@ -2,7 +2,6 @@
   <div class="flex h-screen w-full flex-col">
     <!--  BASE LAYOUT HEADER - START   -->
     <Header
-      v-if="route.name !== 'register' && route.name !== 'login'"
       class="relative z-20"
     />
     <!--  BASE LAYOUT HEADER - END   -->
