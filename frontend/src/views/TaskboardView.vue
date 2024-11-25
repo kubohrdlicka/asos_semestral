@@ -61,7 +61,7 @@
 
               <!-- Posúvateľná tabuľka -->
               <div
-                class="relative overflow-y-auto max-h-[calc(100vh-12rem)] bg-white shadow sm:rounded-lg"
+                class="overflow-y-auto max-h-[calc(100vh-12rem)] bg-white shadow sm:rounded-lg"
               >
                 <ul role="list" class="divide-y divide-gray-100">
                   <li
@@ -69,7 +69,7 @@
                     :key="project.id"
                     class="flex items-center justify-between gap-x-6"
                   >
-                    <Entry :entry="project"></Entry>
+                    <Entry :entry="project" @requestReload="fetchEntries"></Entry>
                   </li>
                 </ul>
               </div>
@@ -92,7 +92,7 @@
 
               <!-- Posúvateľná tabuľka -->
               <div
-                class="relative overflow-y-auto max-h-[calc(100vh-12rem)] bg-white shadow sm:rounded-lg"
+                class="overflow-y-auto max-h-[calc(100vh-13rem)] bg-white shadow sm:rounded-lg"
               >
                 <ul role="list" class="divide-y divide-gray-100">
                   <li
@@ -100,7 +100,7 @@
                     :key="project.id"
                     class="flex items-center justify-between gap-x-6"
                   >
-                    <Entry :entry="project"></Entry>
+                    <Entry :entry="project" @requestReload="fetchEntries"></Entry>
                   </li>
                 </ul>
               </div>
@@ -113,6 +113,7 @@
       v-if="renderEdit"
       :open="visibleEdit"
       @close="toggleEdit(false)"
+      @submit="fetchEntries"
     ></EntrySidover>
   </div>
 </template>
@@ -149,6 +150,8 @@ const [toggleEdit, visibleEdit, renderEdit] =
   useRenderToggleBindings('sideOver')
 
 const fetchEntries = async () => {
+  console.log('aaa');
+  
   try {
     const { response, data } = await useApiFetch('entry').get().json()
     if (response.value?.ok && data.value) {

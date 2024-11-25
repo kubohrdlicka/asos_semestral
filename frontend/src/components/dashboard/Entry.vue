@@ -5,7 +5,7 @@
   >
     <!-- Entry Details -->
     <div class="min-w-0">
-      <div class="flex items-start gap-x-3">
+      <div class="flex items-center gap-x-3">
         <p
           class="text-sm font-semibold"
           :class="entry.type == 'note' ? 'text-primary' : 'text-gray-900'"
@@ -13,11 +13,11 @@
           {{ entry.name }}
         </p>
         <p
-          v-if="entry.type !== 'note'"
+          v-if="(entry.type === 'task') && (!!entry.status)"
           :class="[
             statusColors[entry.status] ||
               'text-gray-600 bg-gray-50 ring-gray-500/10',
-            'mt-0.5 whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
+            'whitespace-nowrap rounded-md px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset',
           ]"
         >
           {{ statusLabels[entry.status] || entry.status }}
@@ -46,7 +46,7 @@
     <!-- Actions -->
     <div class="flex flex-none items-center gap-x-4">
       <!-- Menu for additional actions -->
-      <Menu as="div" class="relative flex-none">
+      <Menu as="div" class="flex-none">
         <MenuButton
           class="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900"
         >
@@ -62,52 +62,64 @@
           leave-to-class="transform opacity-0 scale-95"
         >
           <MenuItems
-            class="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+            class="absolute right-0 z-10 mt-2 w-40 me-6 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
           >
             <MenuItem v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-50 outline-none' : '',
-                  'block px-3 py-1 text-sm text-gray-900',
-                ]"
-              >
-                Edit<span class="sr-only">, {{ entry.name }}</span>
-              </a>
+              <div class="flex items-center">
+                <PencilIcon class="w-[15px] h-[15px] text-gray-400 ms-3 mb-[2px]"/>
+                <a
+                  href="#"
+                  :class="[
+                    active ? 'bg-gray-50 outline-none' : '',
+                    'block px-3 ps-2 py-2 text-sm text-gray-900',
+                  ]"
+                >
+                  Edit<span class="sr-only">, {{ entry.name }}</span>
+                </a>
+              </div>
             </MenuItem>
             <MenuItem v-if="entry.type !== 'note'" v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-50 outline-none' : '',
-                  'block px-3 py-1 text-sm text-gray-900',
-                ]"
-                @click.prevent="toggleStatusModal(true)"
-              >
-                Change status<span class="sr-only">, {{ entry.name }}</span>
-              </a>
-            </MenuItem>
-            <MenuItem v-slot="{ active }">
-              <div
-                :class="[
-                  active ? 'bg-gray-50 outline-none' : '',
-                  'block px-3 py-1 text-sm text-gray-900',
-                ]"
-              >
-                Group Add/Remove<span class="sr-only">, {{ entry.name }}</span>
+              <div class="flex items-center">
+                <TagIcon class="w-[15px] h-[15px] text-gray-400 ms-3 mb-[2px]"/>
+                <a
+                  href="#"
+                  :class="[
+                    active ? 'bg-gray-50 outline-none' : '',
+                    'block px-3 ps-2 py-2 text-sm text-gray-900',
+                  ]"
+                  @click.prevent="toggleStatusModal(true)"
+                >
+                  Change status<span class="sr-only">, {{ entry.name }}</span>
+                </a>
               </div>
             </MenuItem>
             <MenuItem v-slot="{ active }">
-              <a
-                href="#"
-                :class="[
-                  active ? 'bg-gray-50 outline-none' : '',
-                  'block px-3 py-1 text-sm text-gray-900',
-                ]"
-                @click.prevent="handleDelete"
-              >
-                Delete<span class="sr-only">, {{ entry.name }}</span>
-              </a>
+              <div class="flex items-center">
+                <UserIcon class="w-[15px] h-[15px] text-gray-400 ms-3 mb-[2px]"/>
+                <div
+                  :class="[
+                    active ? 'bg-gray-50 outline-none' : '',
+                    'block px-3 ps-2 py-2 text-sm text-gray-900',
+                  ]"
+                >
+                  Change group<span class="sr-only">, {{ entry.name }}</span>
+                </div>
+              </div>
+            </MenuItem>
+            <MenuItem v-slot="{ active }">
+              <div class="flex items-center">
+                <TrashIcon class="w-[15px] h-[15px] text-gray-400 ms-3 mb-[2px]"/>
+                <a
+                  href="#"
+                  :class="[
+                    active ? 'bg-gray-50 outline-none' : '',
+                    'block px-3 px-2 py-2 text-sm text-gray-900',
+                  ]"
+                  @click.prevent="handleDelete"
+                >
+                  Delete<span class="sr-only">, {{ entry.name }}</span>
+                </a>
+              </div>
             </MenuItem>
           </MenuItems>
         </transition>
@@ -124,9 +136,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, defineEmits } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import { PencilIcon, TrashIcon, TagIcon, UserIcon } from '@heroicons/vue/24/outline'
 import StatusModal from '@/components/dashboard/StatusModal.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import { useApiFetch } from '@/composables/useApi'
@@ -146,6 +159,8 @@ const props = defineProps({
     required: false,
   },
 })
+
+const emit = defineEmits(['requestReload'])
 
 // Status mapping
 const statuses = {
@@ -185,6 +200,7 @@ const handleStatusChange = async (newStatus: string) => {
     if (response.value?.ok) {
       console.log('Entry status updated successfully:', data.value)
       props.onStatusChange?.(newStatus)
+      emit('requestReload')
     } else {
       console.error(
         'Failed to update entry status:',
@@ -204,6 +220,7 @@ const handleDelete = async () => {
     if (response.value?.ok) {
       console.log('Entry deleted successfully')
       props.onDelete?.(props.entry.id)
+      emit('requestReload')
     } else {
       console.error('Failed to delete entry:', response.value?.statusText)
     }
