@@ -8,7 +8,8 @@
     "passwordMismatch": "Passwords do not match",
     "loginFailed": "Login failed. Please check your credentials.",
     "serverError": "Server Error",
-    "networkError": "Network Error"
+    "networkError": "Network Error",
+    "invalidEmail": "Invalid email"
   },
   "views": {
     "login": {

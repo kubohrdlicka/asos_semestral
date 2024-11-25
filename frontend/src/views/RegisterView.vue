@@ -49,7 +49,7 @@
               </div>
             </div>
             <p class="text-sm text-red-600">
-              {{ $t('validation.requiredField') }}
+              {{ error.firstName }}
             </p>
           </div>
         </div>
@@ -93,7 +93,7 @@
               </div>
             </div>
             <p class="text-sm text-red-600">
-              {{ $t('validation.requiredField') }}
+              {{ error.lastName }}
             </p>
           </div>
         </div>
@@ -137,7 +137,7 @@
               </div>
             </div>
             <p class="text-sm text-red-600">
-              {{ $t('validation.requiredField') }}
+              {{ error.email }}
             </p>
           </div>
         </div>
@@ -150,14 +150,40 @@
           >
             {{ $t('views.register.password') }}
           </label>
-          <input
-            v-model="form.password"
-            name="password"
-            type="password"
-            id="register-password"
-            autocomplete="new-password"
-            class="block w-full rounded-md border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-600 focus:outline-none focus:ring-primary-600 sm:text-sm"
-          />
+          <div v-if="!error.password">
+            <input
+              v-model="form.password"
+              name="password"
+              type="password"
+              id="register-password"
+              autocomplete="new-password"
+              class="block w-full rounded-md border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-600 focus:outline-none focus:ring-primary-600 sm:text-sm"
+            />
+          </div>
+          <div v-else>
+            <div class="relative rounded-md shadow-sm">
+              <input
+                type="password"
+                name="password"
+                id="register-password"
+                autocomplete="new-password"
+                class="block w-full rounded-md border-0 py-1.5 pr-10 text-red-900 ring-1 ring-inset ring-red-300 placeholder:text-red-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                v-model="form.password"
+                aria-invalid="true"
+              />
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <ExclamationCircleIcon
+                  class="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+            <p class="text-sm text-red-600">
+              {{ error.password }}
+            </p>
+          </div>
         </div>
 
         <!-- Repeat Password -->
@@ -168,18 +194,50 @@
           >
             {{ $t('views.register.passwordRepeat') }}
           </label>
-          <input
-            v-model="form.passwordRepeat"
-            name="passwordRepeat"
-            type="password"
-            id="register-repeat-password"
-            autocomplete="new-password"
-            class="block w-full rounded-md border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-600 focus:outline-none focus:ring-primary-600 sm:text-sm"
-          />
+          <div v-if="!error.passwordRepeat">
+            <input
+              v-model="form.passwordRepeat"
+              name="passwordRepeat"
+              type="password"
+              id="register-repeat-password"
+              autocomplete="new-password"
+              class="block w-full rounded-md border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-600 focus:outline-none focus:ring-primary-600 sm:text-sm"
+            />
+          </div>
+          <div v-else>
+            <div class="relative rounded-md shadow-sm">
+              <input
+                type="password"
+                name="passwordRepeat"
+                id="register-repeat-password"
+                autocomplete="new-password"
+                class="block w-full rounded-md border-0 py-1.5 pr-10 text-red-900 ring-1 ring-inset ring-red-300 placeholder:text-red-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6"
+                v-model="form.passwordRepeat"
+                aria-invalid="true"
+              />
+              <div
+                class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3"
+              >
+                <ExclamationCircleIcon
+                  class="h-5 w-5 text-red-500"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+            <p class="text-sm text-red-600">
+              {{ error.passwordRepeat }}
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-6">
+          <div v-if="error.result" class="text-red-600 text-center">
+            {{ error.result }}
+          </div>
         </div>
 
         <!-- Submit Button -->
-        <div class="mt-10">
+        <div class="mt-4">
           <button
             @click="handleRegister"
             :disabled="loading"
@@ -191,6 +249,20 @@
             </div>
           </button>
         </div>
+
+        <div class="mt-2 flex items-center justify-center">
+          <div class="text-xs font-sans text-primary-500">
+            {{ $t('views.register.toLoginMessage') }}
+          </div>
+          <div
+            class="ml-1 text-xs font-sans underline text-info transition duration-150 ease-in-out hover:text-info-600 focus:text-info-600 active:text-info-700"
+          >
+            <router-link to="login">
+              {{ $t('views.register.loginLinkCTA') }}
+            </router-link>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -223,6 +295,7 @@ const error = ref({
   email: null,
   password: null,
   passwordRepeat: null,
+  result: null,
 })
 
 const loading = ref(false)
@@ -256,8 +329,21 @@ const handleRegister = async () => {
     return
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(form.value.email)) {
+    error.value.email = t('validation.invalidEmail')
+    loading.value = false
+    return
+  }
+
   if (!form.value.password) {
     error.value.password = t('validation.requiredField')
+    loading.value = false
+    return
+  }
+
+  if (!form.value.passwordRepeat) {
+    error.value.passwordRepeat = t('validation.requiredField')
     loading.value = false
     return
   }
@@ -287,11 +373,11 @@ const handleRegister = async () => {
       await router.push({ name: 'dashboard' })
     } else {
       console.error('Registration failed:', data.value)
-      error.value.email = data.value?.message || t('validation.serverError')
+      error.value.result = data.value?.message || t('validation.serverError')
     }
   } catch (error) {
     console.error('Unexpected error during registration:', error)
-    error.value.email = t('validation.networkError')
+    error.value.result = t('validation.networkError')
   } finally {
     loading.value = false
   }

@@ -49,7 +49,7 @@
               </div>
             </div>
             <p class="text-sm text-red-600">
-              {{ $t('validation.requiredField') }}
+              {{ error.username }}
             </p>
           </div>
         </div>
@@ -92,12 +92,18 @@
               </div>
             </div>
             <p class="text-sm text-red-600">
-              {{ $t('validation.requiredField') }}
+              {{ error.password }}
             </p>
           </div>
         </div>
 
-        <div class="mt-10">
+        <div class="pt-6">
+          <div v-if="error.result" class="text-red-600 text-center">
+            {{ error.result }}
+          </div>
+        </div>
+
+        <div class="mt-4">
           <button
             @click="handleLogin"
             :disabled="loading"
@@ -148,6 +154,7 @@ const form = ref({
 const error = ref({
   username: null,
   password: null,
+  result: null,
 })
 
 const loading = ref(false)
@@ -189,11 +196,11 @@ const handleLogin = async () => {
       await router.push({ name: 'dashboard' })
     } else {
       console.error('Login failed:', data.value)
-      error.value.username = data.value?.message || t('validation.loginFailed')
+      error.value.result = data.value?.message || t('validation.loginFailed')
     }
   } catch (err) {
     console.error('Unexpected error during login:', err)
-    error.value.username = t('validation.networkError')
+    error.value.result = t('validation.networkError')
   } finally {
     loading.value = false
   }
