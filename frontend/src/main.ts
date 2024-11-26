@@ -1,6 +1,9 @@
 import { createApp } from 'vue'
 import './tailwind.css'
 import VueApexCharts from 'vue3-apexcharts'
+import dayjs from 'dayjs'
+import 'dayjs/locale/en-gb'
+import Calendar from 'dayjs/plugin/calendar'
 
 // @ts-ignore
 import App from './App.vue'
@@ -9,8 +12,11 @@ import router from './router'
 // import Pinia store
 import { createPinia } from 'pinia'
 
-const app = createApp(App)
+dayjs.locale('en-gb')
+dayjs.extend(Calendar)
 
+const app = createApp(App)
+app.config.globalProperties.$dayjs = dayjs
 
 const pinia = createPinia()
 app.use(pinia)

@@ -29,7 +29,7 @@
         <!-- Deadline -->
         <div class="mt-1 flex items-center gap-x-2">
           <p v-if="entry.deadline" class="whitespace-nowrap">
-            Due on <time :datetime="entry.deadline">{{ entry.deadline }}</time>
+            Due on {{ dayjs(entry.deadline).calendar() }}
           </p>
           <svg
             v-if="entry.deadline"
@@ -169,6 +169,7 @@ import StatusModal from '@/components/dashboard/StatusModal.vue'
 import GroupModal from '@/components/dashboard/GroupModal.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import { useApiFetch } from '@/composables/useApi'
+import dayjs from 'dayjs'
 
 // Props
 const props = defineProps({

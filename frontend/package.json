@@ -21,6 +21,7 @@
     "apexcharts": "^3.45.0",
     "axios": "^1.7.7",
     "axios-auth-refresh": "^3.2.1",
+    "dayjs": "^1.11.13",
     "pinia": "^2.0.22",
     "vue": "^3.2.37",
     "vue-i18n": "^9.2.2",
