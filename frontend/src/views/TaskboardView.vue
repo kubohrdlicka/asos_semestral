@@ -52,7 +52,7 @@
                   <button
                     type="button"
                     class="items-center rounded-full bg-primary p-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                    @click="toggleEdit(true)"
+                    @click="handleCreateTrigger"
                   >
                     <PlusIcon class="w-8 h-8" aria-hidden="true"></PlusIcon>
                   </button>
@@ -69,7 +69,7 @@
                     :key="project.id"
                     class="flex items-center justify-between gap-x-6"
                   >
-                    <Entry :entry="project" @requestReload="fetchEntries"></Entry>
+                    <Entry :entry="project"  @requestReload="fetchEntries" @requestEdit="handleEditTrigger"></Entry>
                   </li>
                 </ul>
               </div>
@@ -100,7 +100,7 @@
                     :key="project.id"
                     class="flex items-center justify-between gap-x-6"
                   >
-                    <Entry :entry="project" @requestReload="fetchEntries"></Entry>
+                    <Entry :entry="project" @requestReload="fetchEntries" @requestEdit="handleEditTrigger"></Entry>
                   </li>
                 </ul>
               </div>
@@ -112,6 +112,7 @@
     <EntrySidover
       v-if="renderEdit"
       :open="visibleEdit"
+      :edit-src="targetEditEntry"
       @close="toggleEdit(false)"
       @submit="fetchEntries"
     ></EntrySidover>
@@ -136,6 +137,7 @@ userGroupStore.fetchUserGroups()
 
 const tabs = [{ name: 'Tasks' }, { name: 'Notes' }]
 const activeTab = ref('Tasks')
+const targetEditEntry = ref<any | null>(null)
 
 const setActiveTab = (tabName: string) => {
   activeTab.value = tabName
@@ -152,6 +154,17 @@ const filteredNotes = computed(() =>
 
 const [toggleEdit, visibleEdit, renderEdit] =
   useRenderToggleBindings('sideOver')
+
+const handleCreateTrigger = () => {
+  targetEditEntry.value = null
+  toggleEdit(true)
+}
+
+const handleEditTrigger = (entryId: number) => {
+  const editEntry = entries.value.find(entry => entry['id'] === entryId)
+  targetEditEntry.value = editEntry
+  toggleEdit(true)
+}
 
 const fetchEntries = async () => {
   console.log('aaa');

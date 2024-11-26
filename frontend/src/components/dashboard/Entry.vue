@@ -88,6 +88,7 @@
                     active ? 'bg-gray-50 outline-none' : '',
                     'block px-3 ps-2 py-2 text-sm text-gray-900',
                   ]"
+                  @click.prevent="handleEditRequest"
                 >
                   Edit<span class="sr-only">, {{ entry.name }}</span>
                 </a>
@@ -187,7 +188,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['requestReload'])
+const emit = defineEmits(['requestReload', 'requestEdit'])
 
 // Status mapping
 const statuses = {
@@ -237,6 +238,10 @@ const handleStatusChange = async (newStatus: string) => {
   } catch (error) {
     console.error('Error updating entry status:', error)
   }
+}
+
+const handleEditRequest = () => {  
+  emit('requestEdit', props.entry.id)
 }
 
 const handleGroupChange = () => {

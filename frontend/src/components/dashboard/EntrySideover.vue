@@ -237,6 +237,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  editSrc: {
+    type: null as any,
+    required: true,
+  },
   tags: {
     type: Array as () => string[],
     default: () => [],
@@ -255,7 +259,7 @@ const emit = defineEmits<{
 }>()
 
 // Reactive state
-const entry = ref({
+const entry = ref( props.editSrc !== null ? props.editSrc : {
   type: 'note',
   name: '',
   tag: '',
