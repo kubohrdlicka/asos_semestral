@@ -46,8 +46,12 @@
           >
             <circle cx="1" cy="1" r="1" />
           </svg>
-          <div v-if="entry.userGroup" class="flex items-center border border-gray-300 rounded-md px-[3px] py-[1px]">
-            <UsersIcon class="text-gray-600 w-[12px] h-[12px] me-0.5"/>
+          <div
+            v-if="entry.userGroup"
+            class="flex items-center border border-gray-300 rounded-md px-[3px] py-[1px]"
+            :style="{borderBlockColor: entry.userGroup.color, color: entry.userGroup.color}"
+            >
+            <UsersIcon class="w-[12px] h-[12px] me-0.5"/>
             <p>{{ entry.userGroup.name }}</p>
           </div>
         </div>
@@ -159,7 +163,7 @@
 <script setup lang="ts">
 import { ref, defineProps, defineEmits, PropType } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
-import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
+import { EllipsisVerticalIcon, UserGroupIcon } from '@heroicons/vue/20/solid'
 import { PencilIcon, TrashIcon, TagIcon, UserIcon, UsersIcon } from '@heroicons/vue/24/outline'
 import StatusModal from '@/components/dashboard/StatusModal.vue'
 import GroupModal from '@/components/dashboard/GroupModal.vue'
