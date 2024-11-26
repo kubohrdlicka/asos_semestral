@@ -129,6 +129,10 @@ import Entry from '@/components/dashboard/Entry.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import EntrySidover from '@/components/dashboard/EntrySideover.vue'
 import { useApiFetch } from '@/composables/useApi'
+import { useUserGroupStore } from '@/store/usergroup'
+
+const userGroupStore = useUserGroupStore()
+userGroupStore.fetchUserGroups()
 
 const tabs = [{ name: 'Tasks' }, { name: 'Notes' }]
 const activeTab = ref('Tasks')

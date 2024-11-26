@@ -38,7 +38,18 @@
           >
             <circle cx="1" cy="1" r="1" />
           </svg>
-          <p class="truncate">Created by {{ entry.createdBy || 'Unknown' }}</p>
+          <p class="truncate">Created by {{ entry.owner !== null ? `${entry.owner.firstName} ${entry.owner.lastName}` : 'Unknown' }}</p>
+          <svg
+            v-if="entry.userGroup"
+            viewBox="0 0 2 2"
+            class="h-1 w-1 fill-current"
+          >
+            <circle cx="1" cy="1" r="1" />
+          </svg>
+          <div v-if="entry.userGroup" class="flex items-center border border-gray-300 rounded-md px-[3px] py-[1px]">
+            <UsersIcon class="text-gray-600 w-[12px] h-[12px] me-0.5"/>
+            <p>{{ entry.userGroup.name }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -96,14 +107,16 @@
             <MenuItem v-slot="{ active }">
               <div class="flex items-center">
                 <UserIcon class="w-[15px] h-[15px] text-gray-400 ms-3 mb-[2px]"/>
-                <div
+                <a
+                  href="#"
                   :class="[
                     active ? 'bg-gray-50 outline-none' : '',
                     'block px-3 ps-2 py-2 text-sm text-gray-900',
                   ]"
+                  @click.prevent="toggleGroupModal(true)"
                 >
                   Change group<span class="sr-only">, {{ entry.name }}</span>
-                </div>
+                </a>
               </div>
             </MenuItem>
             <MenuItem v-slot="{ active }">
@@ -125,6 +138,7 @@
         </transition>
       </Menu>
     </div>
+
     <!-- Modal na zmenu statusu -->
     <StatusModal
       v-if="renderStatusModal"
@@ -132,15 +146,23 @@
       @statusChange="handleStatusChange"
       @close="toggleStatusModal(false)"
     />
+    <GroupModal
+      v-if="renderGroupModal"
+      :open="visibleGroupModal"
+      :entry="props.entry"
+      @groupUpdated="handleGroupChange"
+      @close="toggleGroupModal(false)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, defineProps, defineEmits, PropType } from 'vue'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import { EllipsisVerticalIcon } from '@heroicons/vue/20/solid'
-import { PencilIcon, TrashIcon, TagIcon, UserIcon } from '@heroicons/vue/24/outline'
+import { PencilIcon, TrashIcon, TagIcon, UserIcon, UsersIcon } from '@heroicons/vue/24/outline'
 import StatusModal from '@/components/dashboard/StatusModal.vue'
+import GroupModal from '@/components/dashboard/GroupModal.vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import { useApiFetch } from '@/composables/useApi'
 
@@ -212,6 +234,10 @@ const handleStatusChange = async (newStatus: string) => {
   }
 }
 
+const handleGroupChange = () => {
+  emit('requestReload')
+}
+
 // Handle Delete
 const handleDelete = async () => {
   try {
@@ -232,4 +258,8 @@ const handleDelete = async () => {
 // Status Modal Controls
 const [toggleStatusModal, visibleStatusModal, renderStatusModal] =
   useRenderToggleBindings('statusModal')
+
+const [toggleGroupModal, visibleGroupModal, renderGroupModal] =
+  useRenderToggleBindings('groupModal')
+
 </script>
