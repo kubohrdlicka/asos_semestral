@@ -58,16 +58,16 @@
                         {{ item.name }}
                       </option>
                     </select>
-                    <div class="flex justify-between mt-4">
+                    <div class="block md:flex justify-between mt-2">
                       <button 
                         :disabled="!newAssignment" @click="handleGroupRemove"
-                        class="w-full md:w-1/3 flex w-full justify-center rounded-md border border-transparent bg-gray-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                        class="w-full mt-2 md:w-1/3 flex w-full justify-center rounded-md border border-transparent bg-gray-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                         >
                         Remove
                       </button>
                       <button 
                         :disabled="!newAssignment" @click="handleGroupAdd"
-                        class="w-full md:w-1/3 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                        class="w-full mt-2 md:w-1/3 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                         >
                         Assign
                       </button>
