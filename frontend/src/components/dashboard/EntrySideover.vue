@@ -92,8 +92,8 @@
                           <option value="" disabled selected>
                             Select a tag
                           </option>
-                          <option v-for="tag in tags" :key="tag" :value="tag">
-                            {{ tag }}
+                          <option v-for="tag in tags" :key="tag.id" :value="tag.id">
+                            {{ tag.name }}
                           </option>
                         </select>
                       </div>
@@ -242,8 +242,8 @@ const props = defineProps({
     required: true,
   },
   tags: {
-    type: Array as () => string[],
-    default: () => [],
+    type: Array<any>,
+    required: true,
   },
   loading: {
     type: Boolean,
@@ -259,18 +259,20 @@ const emit = defineEmits<{
 }>()
 
 // Reactive state
-const entry = ref( props.editSrc !== null ? props.editSrc : {
-  type: 'note',
-  name: '',
-  tag: '',
-  priority: '',
-  description: '',
-  deadline: null as Date | null,
-  status: '',
-  color: '',
-  iconName: '',
-  tagId: 0,
-})
+const entry = ref( props.editSrc !== null 
+  ? {...props.editSrc, tag: props.editSrc?.tag?.id}
+  : {
+    type: 'note',
+    name: '',
+    tag: '',
+    priority: '',
+    description: '',
+    deadline: null as Date | null,
+    status: '',
+    color: '',
+    iconName: '',
+    tagId: 0,
+  })
 
 // Methods
 const handleClose = () => {
@@ -292,7 +294,7 @@ const handleSubmit = async () => {
       deadline: entry.value.deadline,
       color: entry.value.color,
       iconName: entry.value.iconName,
-      tagId: entry.value.tagId,
+      tagId: entry.value.tag,
     }
 
     if (entry.value.priority) {

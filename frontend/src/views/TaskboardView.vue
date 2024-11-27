@@ -113,6 +113,7 @@
       v-if="renderEdit"
       :open="visibleEdit"
       :edit-src="targetEditEntry"
+      :tags="tagStore.tags"
       @close="toggleEdit(false)"
       @submit="fetchEntries"
     ></EntrySidover>
@@ -131,9 +132,10 @@ import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import EntrySidover from '@/components/dashboard/EntrySideover.vue'
 import { useApiFetch } from '@/composables/useApi'
 import { useUserGroupStore } from '@/store/usergroup'
+import { useTagStore } from '@/store/tag'
 
 const userGroupStore = useUserGroupStore()
-userGroupStore.fetchUserGroups()
+const tagStore = useTagStore()
 
 const tabs = [{ name: 'Tasks' }, { name: 'Notes' }]
 const activeTab = ref('Tasks')
@@ -166,9 +168,7 @@ const handleEditTrigger = (entryId: number) => {
   toggleEdit(true)
 }
 
-const fetchEntries = async () => {
-  console.log('aaa');
-  
+const fetchEntries = async () => {  
   try {
     const { response, data } = await useApiFetch('entry').get().json()
     if (response.value?.ok && data.value) {
@@ -184,5 +184,7 @@ const fetchEntries = async () => {
 
 onMounted(async () => {
   await fetchEntries()
+  userGroupStore.fetchUserGroups()
+  tagStore.fetchTags()
 })
 </script>
