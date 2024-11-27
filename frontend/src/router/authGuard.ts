@@ -9,7 +9,8 @@ const noAuthWhitelist: RouteRecordName[] = [
   'login',
   'dashboard',
   'profile',
-  'groups'
+  'groups',
+  'tags',
 ]
 
 

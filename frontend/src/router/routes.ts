@@ -50,6 +50,15 @@ export const routes: RouteRecordRaw[] = [
     }
   },
   {
+    name: 'tags',
+    path: '/tags',
+    component: () => import('@/views/TagsView.vue'),
+    meta: {
+      title: 'My Tags',
+      layout: SimpleLayout
+    }
+  },
+  {
     name: 'dashboard',
     path: '/dashboard',
     component: () => import('@/views/TaskboardView.vue'),

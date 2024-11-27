@@ -46,6 +46,7 @@ const lastName = userStore.last_name
 const navigation = [
   { name: 'Dashboard', route: 'dashboard' },
   { name: 'Groups', route: 'groups' },
+  { name: 'Tags', route: 'tags' },
   { name: 'Profile', route: 'profile' },
 ]
 
