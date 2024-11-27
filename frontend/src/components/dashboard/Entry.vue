@@ -49,10 +49,25 @@
           <div
             v-if="entry.userGroup"
             class="flex items-center border border-gray-300 rounded-md px-[3px] py-[1px]"
-            :style="{borderBlockColor: entry.userGroup.color, color: entry.userGroup.color}"
+            :style="{borderColor: entry.userGroup.color, color: entry.userGroup.color}"
             >
             <UsersIcon class="w-[12px] h-[12px] me-0.5"/>
             <p>{{ entry.userGroup.name }}</p>
+          </div>
+          <svg
+            v-if="entry.tag"
+            viewBox="0 0 2 2"
+            class="h-1 w-1 fill-current"
+          >
+            <circle cx="1" cy="1" r="1" />
+          </svg>
+          <div
+            v-if="entry.tag"
+            class="flex items-center border border-gray-300 rounded-md px-[3px] py-[1px]"
+            :style="{borderColor: entry.tag.color, color: entry.tag.color}"
+            >
+            <UsersIcon class="w-[12px] h-[12px] me-0.5"/>
+            <p>{{ entry.tag.name }}</p>
           </div>
         </div>
       </div>
