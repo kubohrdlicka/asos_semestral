@@ -130,7 +130,13 @@
                         <td
                           class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                         >
-                          {{ group?.members?.length }}
+                          <button
+                            type="button"
+                            class="block rounded-md bg-indigo-600 px-4 py-1 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            @click="() => handleGroupSelect(group?.id)"
+                          >
+                            {{ group?.members?.length }}
+                          </button>
                         </td>
                         <td
                           class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
@@ -186,6 +192,12 @@
       @submit="handleGroupCreate"
       @close="toggleEdit(false)"
     />
+    <GroupUsersModal
+      v-if="renderGroupUsersModal"
+      :group="selectedGroup"
+      :open="visibleGroupUsersModal"
+      @close="toggleGroupUsersModal(false)"
+    />
   </div>
 </template>
 
@@ -194,16 +206,23 @@ import { useUserGroupStore } from '@/store/usergroup'
 import { computed, onMounted, ref } from 'vue'
 import { useRenderToggleBindings } from '@/composables/useRenderToggle'
 import UserGroupSideover from '@/components/sideover/UserGroupSideover.vue'
+import GroupUsersModal from '@/components/dashboard/GroupUsersModal.vue'
 import JoinGroup from '@/components/usergroup/JoinGroup.vue'
 import { useUserStore } from '@/store/user'
 
 const tabs = [{ name: 'My groups' }, { name: 'Join group' }]
 
 const activeTab = ref(tabs[0].name)
+const selectedGroup = ref<any>(null)
 
 const setActiveTab = (tabName) => {
   console.log(tabName)
   activeTab.value = tabName
+}
+
+const handleGroupSelect = (groupId: string) => {
+  selectedGroup.value = userGroupStore.getUserGroupById(groupId)
+  toggleGroupUsersModal(true)
 }
 
 const userId = useUserStore().id
@@ -225,6 +244,10 @@ const removeGroup = (group) => {
 const removeMeFromGroup = (group) => {
   useUserGroupStore().leaveUserGroup(group.id)
 }
+
+// Modal Controls
+const [toggleGroupUsersModal, visibleGroupUsersModal, renderGroupUsersModal] =
+  useRenderToggleBindings('groupUsersModal')
 
 onMounted(async () => {
   await userGroupStore.fetchUserGroups()
