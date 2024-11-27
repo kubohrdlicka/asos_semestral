@@ -191,7 +191,7 @@
                           v-if="loading"
                           class="-ml-1 mr-3 h-5 w-5 text-white"
                         />
-                        Save
+                        {{ props.editSrc === null ? 'Save' : 'Update' }}
                       </button>
                     </div>
                   </form>
@@ -302,8 +302,10 @@ const handleSubmit = async () => {
     if (entry.value.status) {
       payload.status = entry.value.status
     }
-
-    const { response, data } = await useApiFetch('entry').post(payload).json()
+    
+    const { response, data } = (props.editSrc === null)
+      ? await useApiFetch('entry').post(payload).json()
+      : await useApiFetch(`entry/${props.editSrc.id}`).patch(payload).json()
 
     if (response.value?.ok) {
       console.log('Entry created successfully:', data.value)
