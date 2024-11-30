@@ -1,12 +1,12 @@
 <template>
   <div
-    class="w-full bg-primary-800 bg-gradient-to-bl from-primary-700 to-primary-900"
+    class="w-full bg-primary-800 bg-gradient-to-b font-sans l from-primary-700 to-primary-900"
   >
     <div class="h-screen w-full flex justify-center items-center">
       <div
         class="w-full md:w-1/2 lg:w-1/3 xl:w-1/6 bg-white mb-24 mx-3 px-4 py-3 rounded-lg shadow-xl"
       >
-        <div class="font-bold text-primary-700 text-4xl mt-2 mb-6">
+        <div class="font-bold text-primary text-4xl mt-2 mb-6">
           {{ $t('views.login.title') }}
         </div>
 
@@ -107,7 +107,7 @@
           <button
             @click="handleLogin"
             :disabled="loading"
-            class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <LoadingIcon v-if="loading" class="h-5 w-5 text-white" />
             <div class="text-md" v-else>
@@ -117,7 +117,7 @@
         </div>
 
         <div class="mt-2 flex items-center justify-center">
-          <div class="text-xs font-sans text-primary-500">
+          <div class="text-xs font-sans text-primary">
             {{ $t('views.login.toRegisterMessage') }}
           </div>
           <div
@@ -138,7 +138,7 @@ import { ExclamationCircleIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/store/user';
+import { useUserStore } from '@/store/user'
 import LoadingIcon from '@/components/LoadingIcon.vue'
 import { useApiFetch } from '@/composables/useApi'
 

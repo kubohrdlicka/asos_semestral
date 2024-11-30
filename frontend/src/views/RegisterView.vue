@@ -1,12 +1,12 @@
 <template>
   <div
-    class="w-full bg-primary-800 bg-gradient-to-br from-primary-700 to-primary-900"
+    class="w-full bg-primary-800 bg-gradient-to-br from-primary-700 to-primary-900 font-sans"
   >
     <div class="h-screen w-full flex justify-center items-center">
       <div
         class="w-full md:w-1/2 lg:w-1/3 xl:w-1/6 bg-white mb-24 mx-3 px-4 py-3 rounded-lg shadow-xl"
       >
-        <div class="font-bold text-primary-700 text-4xl mt-2 mb-6">
+        <div class="font-bold text-primary text-4xl mt-2 mb-6">
           {{ $t('views.register.title') }}
         </div>
 
@@ -241,7 +241,7 @@
           <button
             @click="handleRegister"
             :disabled="loading"
-            class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary-500 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="mt-4 flex w-full justify-center rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <LoadingIcon v-if="loading" class="h-5 w-5 text-white" />
             <div class="text-md" v-else>
@@ -251,7 +251,7 @@
         </div>
 
         <div class="mt-2 flex items-center justify-center">
-          <div class="text-xs font-sans text-primary-500">
+          <div class="text-xs font-sans text-primary">
             {{ $t('views.register.toLoginMessage') }}
           </div>
           <div
@@ -262,7 +262,6 @@
             </router-link>
           </div>
         </div>
-
       </div>
     </div>
   </div>

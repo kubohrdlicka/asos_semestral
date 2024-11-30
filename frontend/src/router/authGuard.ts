@@ -4,15 +4,7 @@ import { until } from '@vueuse/core'
 import type { Router, RouteRecordName } from 'vue-router'
 import { useInitialized } from '@/composables/useInitialized'
 
-const noAuthWhitelist: RouteRecordName[] = [
-  'register',
-  'login',
-  'dashboard',
-  'profile',
-  'groups',
-  'tags',
-]
-
+const noAuthWhitelist: RouteRecordName[] = ['register', 'login']
 
 export async function handleAfterLoginRouting(redirect?: string) {
   const userStore = useUserStore()
@@ -28,17 +20,17 @@ export async function handleAfterLoginRouting(redirect?: string) {
 
 export default function useAuthGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
-    const { isSigned, authSyncedAtLeastOnce } = storeToRefs(useUserStore())
+    const { isAuth } = storeToRefs(useUserStore())
     try {
-      await until(authSyncedAtLeastOnce).toBe(true, {
-        timeout: 100,
-        throwOnTimeout: true,
-      })
+      // await until(authSyncedAtLeastOnce).toBe(true, {
+      //   timeout: 100,
+      //   throwOnTimeout: true,
+      // })
 
       // provide signIn status asynchronously
       const isSignedStatus = new Promise((resolve) => {
         setTimeout(() => {
-          resolve(isSigned.value)
+          resolve(isAuth.value)
         })
       })
 
@@ -61,4 +53,3 @@ export default function useAuthGuard(router: Router) {
     }
   })
 }
-
