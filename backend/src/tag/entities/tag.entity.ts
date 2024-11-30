@@ -16,6 +16,9 @@ export class Tag extends BaseEntity {
   @Column({ nullable: true })
   iconName?: string;
 
-  @OneToMany(() => Entry, (entry) => entry.tag)
+  @OneToMany(() => Entry, (entry) => entry.tag, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   entries: Entry[];
 }

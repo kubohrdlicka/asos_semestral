@@ -100,6 +100,10 @@ export class EntryService {
       entry.tag = tag;
     }
 
+    if (updateEntryDto.tagId === null) {
+      entry.tag = null;
+    }
+
     if (updateEntryDto.priority) {
       if (!Object.values(Priority).includes(updateEntryDto.priority)) {
         throw new NotFoundException(

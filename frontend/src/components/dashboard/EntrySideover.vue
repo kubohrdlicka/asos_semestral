@@ -264,7 +264,7 @@ const entry = ref( props.editSrc !== null
   : {
     type: 'note',
     name: '',
-    tag: '',
+    tag: "",
     priority: '',
     description: '',
     deadline: null as Date | null,
@@ -294,7 +294,7 @@ const handleSubmit = async () => {
       deadline: entry.value.deadline,
       color: entry.value.color,
       iconName: entry.value.iconName,
-      tagId: entry.value.tag,
+      tagId: !!entry.value.tag ? entry.value.tag : undefined,
     }
 
     if (entry.value.priority) {
