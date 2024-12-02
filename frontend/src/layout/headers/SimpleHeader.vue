@@ -40,6 +40,7 @@
         v-if="renderMobileMenu"
         :open="visibleMobileMenu"
         :navigation="navigation"
+        @logout="logout"
         @close="toggleMobileMenu(false)"
       />
 

@@ -19,18 +19,27 @@
             >
               <DialogPanel class="pointer-events-auto w-screen max-w-md">
                 <div class="pt-16" @click="handleClose"></div>
-                <div
-                  class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl pt-8"
-                >
-                  
-                <div v-for="(route, i) in navigation" :key="i" class="py-3 px-2 mx-4">
-                  <router-link
-                    @click="handleClose"
-                    :to="route['route']"
-                    class="font-medium text-gray-500 hover:text-gray-900"
-                    >{{ route['name'] }}</router-link
+                  <div
+                    class="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl pt-8"
                   >
-                </div>
+                    
+                  <div v-for="(route, i) in navigation" :key="i" class="py-3 px-2 mx-4">
+                    <router-link
+                      @click="handleClose"
+                      :to="route['route']"
+                      class="font-medium text-gray-500 hover:text-gray-900"
+                      >{{ route['name'] }}</router-link
+                    >
+                  </div>
+
+                  <div class="mt-16 mx-4">
+                    <a
+                      @click.prevent="logout"
+                      class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer my-4 px-2"
+                    >
+                      Log out <span aria-hidden="true">&rarr;</span>
+                    </a>
+                  </div>
 
                 </div>
               </DialogPanel>
@@ -52,6 +61,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import router from '../../router'
+import { useUserStore } from '../../store/user'
 
 // Props
 const props = defineProps({
@@ -61,17 +71,22 @@ const props = defineProps({
   },
   navigation: {
     required: true,
-  }
+  },
 })
 
 // Emits
 const emit = defineEmits<{
   (e: 'close'): void
+  (e: 'logout'): void
 }>()
 
 // Methods
 const handleClose = () => {
   emit('close')
+}
+
+const logout = () => {
+  emit('logout')
 }
 
 </script>
