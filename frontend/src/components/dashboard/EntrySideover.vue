@@ -92,6 +92,9 @@
                           <option value="" disabled selected>
                             Select a tag
                           </option>
+                          <option :value="null">
+                            No tag
+                          </option>
                           <option v-for="tag in tags" :key="tag.id" :value="tag.id">
                             {{ tag.name }}
                           </option>
@@ -294,7 +297,7 @@ const handleSubmit = async () => {
       deadline: entry.value.deadline,
       color: entry.value.color,
       iconName: entry.value.iconName,
-      tagId: !!entry.value.tag ? entry.value.tag : undefined,
+      tagId: !!entry.value.tag ? entry.value.tag : null,
     }
 
     if (entry.value.priority) {
