@@ -1,4 +1,4 @@
-import { DATA_SOURCE, ENTRY_REPOSITORY } from 'src/common/constants';
+import { DATA_SOURCE, ENTRY_REPOSITORY } from '../common/constants';
 import { DataSource } from 'typeorm';
 import { Entry } from './entities/entry.entity';
 

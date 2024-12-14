@@ -1,5 +1,5 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { ENTRY_REPOSITORY, TAG_REPOSITORY } from 'src/common/constants';
+import { ENTRY_REPOSITORY, TAG_REPOSITORY } from '../common/constants';
 import { Repository } from 'typeorm';
 import { CreateTagDto } from './dto/create-tag.dto';
 import { UpdateTagDto } from './dto/update-tag.dto';

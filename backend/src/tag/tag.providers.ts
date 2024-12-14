@@ -2,10 +2,10 @@ import {
   DATA_SOURCE,
   ENTRY_REPOSITORY,
   TAG_REPOSITORY,
-} from 'src/common/constants';
+} from '../common/constants';
 import { DataSource } from 'typeorm';
 import { Tag } from './entities/tag.entity';
-import { Entry } from 'src/entry/entities/entry.entity';
+import { Entry } from '../entry/entities/entry.entity';
 
 export const tagProviders = [
   {

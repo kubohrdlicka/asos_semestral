@@ -1,4 +1,4 @@
-import { DATA_SOURCE, USER_GROUP_REPOSITORY } from 'src/common/constants';
+import { DATA_SOURCE, USER_GROUP_REPOSITORY } from '../common/constants';
 import { UserGroup } from './entities/usergroup.entity';
 import { DataSource } from 'typeorm';
 

@@ -6,7 +6,7 @@ import {
   IsDate,
   IsNumber,
 } from 'class-validator';
-import BaseDto from 'src/common/dto/base.dto';
+import BaseDto from '../../common/dto/base.dto';
 
 enum Type {
   NOTE = 'note',

@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { GetUserDto } from './dto/get-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { USERS_REPOSITORY } from 'src/common/constants';
+import { USERS_REPOSITORY } from '../common/constants';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Status } from '../entry/entities/entry.entity';
 

@@ -1,5 +1,5 @@
 import { IsEmail, IsNumber, IsString } from 'class-validator';
-import BaseDto from 'src/common/dto/base.dto';
+import BaseDto from '../../common/dto/base.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetUserDto extends BaseDto {
