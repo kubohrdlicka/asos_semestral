@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { USERS_REPOSITORY } from 'src/common/constants';
+import { USERS_REPOSITORY } from '../common/constants';
 
 export const usersProviders = [
   UsersService,

@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Tag } from 'src/tag/entities/tag.entity';
-import BaseEntity from 'src/common/entities/base.entity';
+import { User } from '../../users/entities/user.entity';
+import { Tag } from '../../tag/entities/tag.entity';
+import BaseEntity from '../../common/entities/base.entity';
 import { UserGroup } from '../../usergroup/entities/usergroup.entity';
 
 export enum Priority {

@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 
 import { IsEmail } from 'class-validator';
-import BaseEntity from 'src/common/entities/base.entity';
-import { Entry } from 'src/entry/entities/entry.entity';
-import { UserGroup } from 'src/usergroup/entities/usergroup.entity';
+import BaseEntity from '../../common/entities/base.entity';
+import { Entry } from '../../entry/entities/entry.entity';
+import { UserGroup } from '../../usergroup/entities/usergroup.entity';
 import * as argon2 from 'argon2';
 
 @Entity()

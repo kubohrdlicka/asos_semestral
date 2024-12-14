@@ -1,5 +1,5 @@
-import BaseEntity from 'src/common/entities/base.entity';
-import { Entry } from 'src/entry/entities/entry.entity';
+import BaseEntity from '../../common/entities/base.entity';
+import { Entry } from '../../entry/entities/entry.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 @Entity()

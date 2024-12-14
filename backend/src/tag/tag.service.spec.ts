@@ -108,9 +108,9 @@ describe('TagController', () => {
         description: 'Test description',
         iconName: 'test-icon',
       };
-      jest.spyOn(tagService, 'remove').mockResolvedValue();
+      jest.spyOn(tagService, 'remove').mockResolvedValue(undefined);
 
-      expect(await tagController.remove(String(id))).toEqual(result);
+      expect(await tagController.remove(String(id))).toBeUndefined();
       expect(tagService.remove).toHaveBeenCalledWith(id);
     });
   });

@@ -1,6 +1,6 @@
-import BaseEntity from 'src/common/entities/base.entity';
-import { Entry } from 'src/entry/entities/entry.entity';
-import { User } from 'src/users/entities/user.entity';
+import BaseEntity from '../../common/entities/base.entity';
+import { Entry } from '../../entry/entities/entry.entity';
+import { User } from '../../users/entities/user.entity';
 import {
   Entity,
   Column,

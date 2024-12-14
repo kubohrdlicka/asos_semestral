@@ -3,9 +3,9 @@ import { Repository } from 'typeorm';
 import { Entry } from './entities/entry.entity';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { UpdateEntryDto } from './dto/update-entry.dto';
-import { UsersService } from 'src/users/users.service';
-import { TagService } from 'src/tag/tag.service';
-import { ENTRY_REPOSITORY } from 'src/common/constants';
+import { UsersService } from '../users/users.service';
+import { TagService } from '../tag/tag.service';
+import { ENTRY_REPOSITORY } from '../common/constants';
 import { Priority, Status } from './dto/create-entry.dto';
 import { User } from '../users/entities/user.entity';
 
